@@ -1,1 +1,0 @@
-"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\ildasm.exe" /TEXT "%~1" > "%~1.il"
