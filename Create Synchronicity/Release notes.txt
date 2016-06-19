@@ -1,0 +1,305 @@
+-- Create Synchronicity --
+* Information
+Languages:         English, French, German, Portuguese, Italian, Spanish, 
+                   Swedish, Dutch, Czech, Indonesian, Hebrew, Danish, Russian,
+                   Estonian, Polish, Bulgarian, Korean, Chinese (Simplified),
+                   Hungarian, Chinese (Traditional), Amharic, Greek, Turkish,
+                   Japanese, Slovene, Norwegian
+Created on:        June 3, 2009
+Created by:        Clément Pit--Claudel (Create Software)
+Special thanks:    Mauricio Leyzaola, Christian Eibler, Alexander Barnes,
+                   Dr. Beau Webber - Lab-Tools Ltd, John Lundy, William Cook,
+                   Carl Almond, Timothy Wessels, Jim Ogden, Jim Maxwell, 
+                   Jim Lakusta, Doug Hall, Klaus Becker, Ralphie Retana Jr.,
+                   MJ Raatz, Hal Berman, The GD Workshop, David Klun,
+                   Rob Freeborn, Simone Cramer, Frank Klassen, Marceli Kubik,
+                   Daniel Díaz Quintero, Kyle D. Eberle (kyledavidphoto.com),
+                   Thomas (Grraver), Orestes Panagoulas, Troy Schnack,
+                   Samuel Fernmo, Carl-Gustav Werner, Masahiko Kuroiwa,
+                   Brenden Veljacich, Shawn McTear, Eugene Dreyer,
+                   Terje Ballangby, Tim Naylor, Geoffroy Ménard, Rick Weinstein,
+                   Ira Bashkow, Ron Aronica, Sela (www.SelaGroup.com),
+                   Slobodan Dijaković, Gavin W. F. Smith, Christine Aznar,
+                   Richard Duda, David Connolly, G. W. Daly, Tom & Kathi Brown,
+                   Felipe Esquivel, Dimitri De Franciscis, Robert Bleiker,
+                   Trevor Patrick Photography, George Spark, Jack Fowler, 
+                   Bert Byfield, Michael Boiger, atomMan， Steffen Hartmann,
+                   Roy Hawk
+Patches:           U.N. Owen
+Translations:      Clément Pit--Claudel, Florian Haag, André Modesto, Teo Rojo,
+                   Pedro Silva, Marco Medri, Jaime Roquero, Hampus Bengtsson,
+                   John Van Amstel, Mauricio Leyzaola, Jiří Stuchlík, Sergio
+                   Chiapperini, Gush Katif Laad, Bjørn Karlstrøm, Andres Aule,
+                   S. G. Park, Marco C., Marco Salvagno, Lajos Toldy, Elfalem
+                   Alemu, Juan Pablo Ahumada, Stathis Grigoriadis, Tom Szabo,
+                   Masahiko Kuroiwa, Romel Vera, Tomaz Valh, Carl-Gustav Werner,
+                   Ademas Pramuatmaja, Jim Leirvik, Sebastià Sureda, Matej Sur,
+                   Laurynas Braskus (ITDC)
+
+* Technical information
+License:           GNU GPL v3 or later (see "COPYING")
+Coded in:          Visual Basic .Net
+Requires:          .Net Framework v2
+
+* Contact
+Website:           http://synchronicity.sourceforge.net
+Contact:           createsoftware@users.sourceforge.net
+SVN Server:        https://synchronicity.svn.sourceforge.net/svnroot/synchronicity
+
+* Change Log
+NEW: New feature; FIX: Bug fixed; UPD: Update/Improvement; !: Important modification, SYN: Synopsis 
+--------------------------
+--- In future releases --- 
+Oct. 28, 2012 - UPD: Folders excluded using regular expressions are now grayed-out in folder tree views.
+Oct. 27, 2012 - FIX: Enabling look-backwards date filters forced replication empty directories, even if it was manually disabled.
+Oct. 10, 2012 - NEW: !Catalan translation, by Sebastià Sureda. Gràcies!
+Sep. 05, 2012 - UPD: Run Create Synchronicity immediately after the setup. 
+Aug. 29, 2012 - UPD: Add a percentage progress indicator in task bar and window title.
+Jun. 27, 2012 - FIX: Profiles name overlapping in some cases (#3515300).
+May. 26, 2012 - NEW: !Norwegian translation, by Jim Leirvik. 
+
+--- Version 6.0 ---
+Mar. 11, 2012 - SYN: Create Synchronicity 6.0 comes with prettier logs, a much faster preview list, 8 new expert settings, 6 new languages, post-sync scripts, and lots of updates and fixes. 
+Feb. 21, 2012 - UPD: Pressing alt and double-clicking an entry in the preview list now opens the corresponding destination file.
+Feb. 14, 2012 - FIX: "File not found" exception upon start-up in some rare cases.
+Feb. 06, 2012 - UPD: Stop updating speed while copying a large file.
+Feb. 05, 2012 - FIX: Seldom UnauthorizedAccessExceptions when syncing to a recently reconfigured NAS.
+Jan. 31, 2012 - FIX: The year part in %MMMYYYY% didn't expand correctly.
+Jan. 30, 2012 - NEW: (Hidden setting) Customizable delay between queued profiles.
+Jan. 09, 2012 - NEW: (Hidden setting) Auto-include new subfolders of non-recursively selected folders.
+Dec. 31, 2011 - UPD: Change the way arguments are passed to diff programs (see the manual)
+Dec. 15, 2011 - NEW: !Send logs by e-mail (see "scripts/mail.bat /?" for more info).
+Dec. 14, 2011 - UPD: Improve hook scripts support.
+Dec. 13, 2011 - UPD: Rework duration estimates; show deletion speed while cleaning up the destination.
+Dec. 13, 2011 - UPD: Show a tray notification when a backup completes.
+Dec. 12, 2011 - NEW: (Hidden setting) Log all synchronization errors to a separate profile-name.errors.log file (#3448527).
+Dec. 11, 2011 - UPD: !Use a VirtualMode preview list, saving up to 12% scanning time, and using a good 60% less memory. Also, loading the preview list is now instantaneous.
+Dec. 02, 2011 - UPD: Detailed view now contains a history of last backups (Ctrl+L)
+Nov. 27, 2011 - UPD: !Prettier logs : alternating rows, cleaner layout, direct shortcut to latest entry.
+Nov. 07, 2011 - NEW: (Hidden setting) Preview-only profiles (#3089839).
+Nov. 04, 2011 - FIX: Subtle, non-critical corner-case bug: "Strict Mirror" sometimes remained on although syncing incrementally.
+Nov. 04, 2011 - UPD: Sync all profiles in a group from the command line.
+Nov. 01, 2011 - NEW: !100'000 downloads!
+Oct. 27, 2011 - NEW: (Hidden setting) Forget (discard) files older than a custom number of days.
+Oct. 25, 2011 - NEW: !Create profile groups to keep your profiles organized.
+Oct. 25, 2011 - UPD: Restrict the "propagate updates" to expert mode.
+Oct. 21, 2011 - UPD: If Verdana is broken, use another font.
+Sep. 29, 2011 - NEW: (Hidden setting) Exclude hidden files.
+Sep. 23, 2011 - NEW: !Japanese translation, by Masahiko Kuroiwa. ありがと!
+Jul. 15, 2011 - NEW: (Hidden setting) Optionally disable auto-completion in Settings window.
+Jul. 11, 2011 - NEW: (Hidden setting) Post-sync actions.
+Jul. 11, 2011 - NEW: !Turkish translation, by muska. Sağ olun!
+Jul. 08, 2011 - UPD: #3357854: Allow case-only changes in profile names and fix sorting after rename.
+Jul. 05, 2011 - FIX: Some users reported an error with the write-permissions file.
+Jun. 10, 2011 - NEW: Command-line switch to sync all profiles (/all).
+Jun. 10, 2011 - NEW: !Greek translation, by Stathis Grigoriadis. Ευχαριστώ!
+Jun. 07, 2011 - NEW: !Slovene translation, with parts by Tomaz Valh. Hvala!
+May. 28, 2011 - NEW: !Amharic translation, by Elfalem Alemu. አመሰግናለሁ!
+May. 18, 2011 - NEW: !Chinese (traditional) translation. 謝謝!
+
+-- Version 5.2, 5.2.1 --
+May. 03, 2011 - SYN: Create Synchronicity 5.2 bundles improvements to the threading engine (~+12% in scanning performance), 7 new expert settings, 4 new translations, a few bug fixes, and a wealth of discrete updates.
+Apr. 24, 2011 - UPD: Improved settings parsing.
+Apr. 24, 2011 - UPD: Cancelling a catching up, or shutting down while catching up, does not mark the profile as caught up.
+Apr. 24, 2011 - UPD: Better exception handling.
+Apr. 23, 2011 - UPD: !Reworked threading system.
+Apr. 23, 2011 - NEW: Improved error reporting.
+Apr. 12, 2011 - NEW: !Hungarian translation, by Lajos Toldy. Köszönöm!
+Apr. 12, 2011 - NEW: (Expert setting) Estimate remaining time (experimental).
+Apr. 07, 2011 - UPD: Private key binary signining.
+Apr. 01, 2011 - NEW: (Expert setting) Optional text-only logs.
+Apr. 01, 2011 - UPD: Rewrite part of the settings handling engine, enforcing stronger type checking.
+Mar. 05, 2011 - FIX: Check for partially locked files before copying.
+Feb. 13, 2011 - NEW: (Expert setting) Copy integrity validation using md5 checksums.
+Feb. 13, 2011 - NEW: (Expert setting) On-the-fly BZip2 compression.
+Feb. 12, 2011 - NEW: !Chinese (simplified) translation, by ycysuk. 谢谢!
+Feb. 11, 2011 - NEW: (Expert setting) On-the-fly GZip compression.
+Feb. 03, 2011 - NEW: Pressing Ctrl+L in main window will display a list of profiles instead of a tile.
+Feb. 02, 2011 - NEW: (Expert setting) Show diff for modified files.
+Jan. 26, 2011 - NEW: (Expert setting) Compare file size in addition to last modified date.
+Jan. 21, 2011 - NEW: !Korean translation, by S.G.Park. 감사합니다!
+Jan. 07, 2011 - NEW: !Bulgarian translation. благодаря!
+Dec. 24, 2010 - NEW: !Automatic log cleaning. Default set to keeping 7 log sections. 
+Dec. 23, 2010 - FIX: Fix catching-up interval miscalculation for monthly backups, spotted by Tim Coysh. Thanks!
+
+-- Version 5.1 --
+Dec. 19, 2010 - SYN: Create Synchronicity 5.1 introduces lots of productivity upgrades, a new threading system, cosmetic improvements, and 3 new translations.
+Dec. 19, 2010 - FIX: Fix #3130676.
+Dec. 18, 2010 - FIX: Fix #3037531 (display times as HH:MM instead of HH:M).
+Dec. 09, 2010 - UPD: Revision 1000!
+Dec. 08, 2010 - NEW: Introduce automatic creation of destination root in expert mode.
+Dec. 08, 2010 - NEW: Create an Expert mode, deprecate hashing. 
+Dec. 07, 2010 - NEW: !Polish translation, by forum user matczar. Dziękuję!
+Nov. 27, 2010 - UPD: Save main window location and size on exit (patch #3120708).
+Nov. 20, 2010 - UPD: Add a clock icon to identify scheduled profiles in the main window.
+Nov. 06, 2010 - UPD: No need to restart to change language anymore.
+Nov. 03, 2010 - UPD: !Auto-start the scheduler when needed, eg. after a change in scheduling settings.
+Nov. 03, 2010 - UPD: Prevent multiple of the same scheduler (same path, same file name) to run.
+Nov. 02, 2010 - UPD: !Complete rewrite of the threading system, for better efficiency and precision.
+Nov. 01, 2010 - NEW: !Estonian translation, by Andres Aule. Aitäh!
+Oct. 29, 2010 - NEW: !Language selection screen at first launch.
+Oct. 29, 2010 - NEW: !Danish translation, by Bjørn Karlstrøm. Tak!
+
+-- Version 5.0 --
+Oct. 25, 2010 - SYN: Create Synchronicity 5.0 brings various bug fixes, 3 new languages, easier folder selection, new command line options, and implements many feature requests.
+Oct. 25, 2010 - UPD: Open log when clicking related balloon messages.
+Oct. 19, 2010 - NEW: !Full PDF manual.
+Oct. 17, 2010 - UPD: Cleaner failure on "destination not found" when synchronizing a scheduled profile.
+Oct. 14, 2010 - UPD: !Replace server builds with a "/silent" switch. Implies "/quiet" and "/log".
+Oct. 14, 2010 - NEW: "/log" command-line switch: forces the creation of an application log.
+Oct. 13, 2010 - NEW: "/help" command-line switch.
+Oct. 10, 2010 - NEW: Special server builds.
+Oct. 09, 2010 - NEW: !Pop-up list to suggest path in settings dialog.
+Oct. 09, 2010 - UPD: Preserve the "name"\path\ format when using the "browse" dialog. (#3081522)
+Oct. 07, 2010 - NEW: !Localized installer, in most of the supported languages.
+Oct. 05, 2010 - NEW: !Hebrew translation, by Gush Katif Laad. תודה!
+Oct. 05, 2010 - FIX: Minor display glitch in settings screen.
+Sep. 21, 2010 - NEW: Pressing F1 opens the manual.
+Sep. 12, 2010 - FIX: Invalid preview list when syncing a complex folder architecture, in some special cases.
+Sep. 12, 2010 - UPD: Reworked italian translation, by Sergio Chiapperini. Grazie mille ;)
+Sep. 07, 2010 - NEW: !Czech translation, by Jiří Stuchlík. Díky moc!
+Aug. 30, 2010 - NEW: !Russian translation, by an anonymous blog author. Thanks!
+Aug. 26, 2010 - UPD: Better support for implicit paths.
+Aug. 26, 2010 - FIX: !Path translation bug occuring in edge cases. (#3052979).
+Aug. 26, 2010 - FIX: Selection bug when using paths in the form "MyDrive"\MyFolder.
+Aug. 25, 2010 - FIX: Mishandled command-line argument (#3053379, #3053239).
+
+-- Version 4.3 --
+Aug. 17, 2010 - SYN: A few bug fixes, bringing more stability and more performance, along with two new languages, Swedish and Dutch. 
+Aug. 17, 2010 - UPD: Prettier display of About/Settings link.
+Aug. 17, 2010 - NEW: Donation button.
+Aug. 17, 2010 - NEW: Show profile name in title bar when synchronizing.
+Aug. 17, 2010 - UPD: Postpone catching up to next major release.
+Aug. 17, 2010 - FIX: Error when opening the log file for writing (bug id: #3037574).
+Aug.  8, 2010 - NEW: !Dutch translation by John Van Amstel. Bedankt!
+Jul. 31, 2010 - NEW: !Swedish translation by Hampus Bengtsson. Tack!
+Jul. 24, 2010 - FIX: Changes in scheduling settings would sometimes fail to be updated.
+Jul. 24, 2010 - NEW: Add a setting to catch up missed backups (when a scheduled backup has been repeatedly missed, forces its immediate execution). 
+
+-- Version 4.2 --
+Jul. 24, 2010 - SYN: Create Synchronicity 4.2 can tell the scheduler about your configuration changes immediately, without waiting for a reboot. Except for this, this release is mostly a bugfix release, including a large rewriting of non-vital parts of the code.
+Jul. 23, 2010 - NEW: !Changes in the scheduling configuration are now transmitted seamlessly to the scheduler, without requiring a reboot.
+Jul. 23, 2010 - UPD: Rewrite a large part of the scheduling engine, factor out some code for faster and more streamlined execution.
+Jul. 23, 2010 - FIX: Small display glitch in the scheduling settings screen.
+Jul. 22, 2010 - FIX: Queing mistakes when more than 3 profiles were scheduled.
+Jul. 22, 2010 - UPD: Rewrite part of the logging engine.
+Jul. 22, 2010 - FIX: Fix a possible freeze when writing log files.
+Jul. 19, 2010 - FIX: "Mirror empty directories" setting wasn't always remembered.
+
+-- Version 4.1 --
+Jul. 18, 2010 - SYN: Various usability/interface improvements, installer fixes, and heavy optimization of vital backup routines to achieve a largely noticeable speedup (~10/15%).
+Jul. 17, 2010 - UPD: More user-friendly installer: detect when the program is running and thus cannot be updated.
+Jul. 15, 2010 - UPD: Improve log formatting for better readability (use actual tables).
+Jul. 15, 2010 - NEW: Generate XHTML-compliant logs.
+Jul. 13, 2010 - UPD: !Add two reload buttons to reload directory structures.
+Jul.  3, 2010 - UPD: !First step towards heavy optimization of synchronization/backup routines.
+
+-- Version 4.0 --
+Jun. 14, 2010 - SYN: Create Synchronicity 4.0 brings huge usability and feature improvements, along with 1 new translation (to Italian). It supports new paths formats, displays built-in help tips, and implements proxy support, better logging, and a nicer interface.
+Jun. 13, 2010 - NEW: Welcome Jaime Roquero among translators :)
+Jun.  5, 2010 - NEW: Built-in help link.
+Jun.  5, 2010 - UPD: Usability improvement: Help tooltips.
+May. 25, 2010 - FIX: Small bug with root path display.
+May. 25, 2010 - NEW: !Italian translation by Marco Medri. Mille Grazie!
+May. 18, 2010 - NEW: System credentials are now used by default when checking for updates through a proxy.
+May. 15, 2010 - UPD: Error messages now include file paths.
+May. 13, 2010 - NEW: !If you have a drive labeled "MyUsb" for example, then you can now refer to it using "MyUsb"\MyFolder\MySubFolder etc. Create Synchronicity will automatically translate this path to use the right drive letter.
+May. 13, 2010 - NEW: Open folders from preview list by holding Control while double-clicking.
+May. 13, 2010 - FIX: Added proxy support.
+May. 13, 2010 - FIX: Sorting bug at scheduler startup.
+May. 13, 2010 - FIX: Permissions-related bug when copying write protected files with DST correction enabled.
+May. 12, 2010 - NEW: Welcome Pedro Silva among translators :)
+May. 12, 2010 - UPD: Changed right-click behaviour in main window to simply display the menu.
+May. 11, 2010 - UPD: Improved log display.
+May. 10, 2010 - UPD: Clarify preview screen.
+May. 10, 2010 - UPD: Even nicer progress display (show more info on created/deleted files and folders).
+May. 10, 2010 - NEW: Make "rename" accessible by right click.
+May.  9, 2010 - UPD: Display root path as base node in source and destination folder tree view (aka nicer directory path display/selection).
+May.  9, 2010 - NEW: Sort preview list by clicking column headers.
+May.  9, 2010 - NEW: Open files from preview list by double-clicking.
+May.  9, 2010 - UPD: Nicer progress display.
+May.  8, 2010 - UPD: Easier directory inclusion/exclusion.
+May.  7, 2010 - FIX: Small scheduler date miscalculation.
+
+-- Version 3.5 --
+Apr. 20, 2010 - SYN: 3 new translations, lots of new features (including scheduling, profiles queuing, and new path formats), and usability improvements.
+Apr. 18, 2010 - UPD: Improve installer compression, decreasing installer size by 15%.
+Mar. 27, 2010 - NEW: Support for queuing profiles (using the command line).
+Mar. 25, 2010 - NEW: !Spanish translation by Teo Rojo. ¡Muchas gracias!
+Mar. 20, 2010 - NEW: !Portuguese translation by André Modesto. Obrigado!
+Mar. 13, 2010 - UPD: Improve application reactiveness when running scheduled tasks.
+Mar. 13, 2010 - FIX: Better handling of manually modified config files.
+Mar.  8, 2010 - NEW: Keyboard navigation.
+Mar.  7, 2010 - NEW: Rename profiles by right-clicking.
+Mar.  6, 2010 - NEW: !Full scheduling support, including fully customizable schedule settings (including a GUI).
+Mar.  5, 2010 - NEW: !Initial, command-line only support for task scheduling.
+Mar.  3, 2010 - FIX: When running from a write-protected directory, display a warning if configuration files were found. Fixes a privileges-related bug on Windows Vista.
+Mar.  1, 2010 - NEW: !Native support for relative paths, such as "..\..\Documents"
+Feb. 28, 2010 - NEW: !Native support for UNC paths (paths to network drives such as "\\dlink-6A4EA4\Documents").
+Feb. 26, 2010 - NEW: !German translation by Florian Haag. Thanks!
+Feb. 26, 2010 - NEW: !When running from a write-protected directory, store settings in the ApplicationData folder.
+Feb. 26, 2010 - NEW: New "swap" button, to swap left and right folders.
+
+-- Version 3.0 --
+Feb. 25, 2010 - SYN: Major update: translations, full regex support, cosmetic updates and a few new options.
+Feb. 21, 2010 - NEW: Add a menu item to clear logs.
+Feb. 20, 2010 - UPD: !Better command-line support.
+Feb. 17, 2010 - NEW: !Full regex support for file inclusion/exclusion.
+Feb. 17, 2010 - UPD: Better-looking icon.
+Feb. 13, 2010 - UPD: A few cosmetic updates.
+Feb. 13, 2010 - NEW: Add a "Strict time check" advanced option which, when disabled, allows file times to differ by up to 2 seconds before forcing an update.
+Jan. 31, 2010 - NEW: !French translation.
+Jan. 23, 2010 - NEW: !Create Synchronicity can now be translated to other languages.
+Nov.  4, 2009 - UPD: Small performance increase using a new way to calculate file size.
+
+-- Version 2.2 --
+Oct. 26, 2009 - SYN: A few new options, including time offsets, and a nicer log display.
+Oct. 26, 2009 - NEW: Add a "Time Offset" property to compensate for summer/winter time changes.
+Oct. 20, 2009 - UPD: Nicer log display (HTML Logs)
+Oct. 18, 2009 - NEW: !Automated installer for Create Synchronicity.
+
+-- Version 2.1 --
+Oct. 17, 2009 - SYN: Many bug fixes, a few small improvements, better log handling.
+Oct. 12, 2009 - FIX: Update the way attributes are copied, to avoid "Access denied" errors.
+Oct. 11, 2009 - FIX: A few changes in the way flenames are handled, fixing an uppercase/lowercase-related bug.
+Sep. 28, 2009 - FIX: Better handling of filetimes.
+Sep. 28, 2009 - NEW: Add a "Strict" option for the "mirror" action, to revert files that were modified on the right.
+
+-- Version 2.0 --
+Aug. 29, 2009 - SYN: Various speedups (281% speed increase), more accurate algorithm, and propagation of file attributes.
+Aug. 27, 2009 - FIX: Folder selection bug in settings screen.
+Aug. 27, 2009 - NEW: Support of command-line arguments "/quiet" and "/run".
+Jul. 25, 2009 - UPD: !30% average speed increase by rewriting the syncing module (test scan: 31 to 24s).
+Jul. 25, 2009 - UPD: !Create Synchronicity now copies file attributes.
+Jul. 21, 2009 - FIX: !Final fix for a FAT-related bug: file copies from NTFS to FAT are now accurate and not redundant. See http://sourceforge.net/tracker/?func=detail&aid=2824316&group_id=264348&atid=1130882 and/or http://support.microsoft.com/kb/127830/en-us/.
+Jul. 14, 2009 - FIX: More accurate folder selection.
+Jul. 13, 2009 - FIX: Partial fix for a FAT-related bug: if the time difference between files is below 1.0s, consider the files are the same.
+Jul. 13, 2009 - FIX: Windows is packed up with bugs of all kinds: allow multiple instances of the application to run, as the opposite made the application unstable on some copies of XP.
+Jul. 13, 2009 - UPD: !By using a new way to calculate the scanning speed, Create Synchronicity is now 3 times faster. (test scan: 74 to 31s)
+Jul. 12, 2009 - UPD: A new mechanism is used to store configuration.
+Jul. 12, 2009 - NEW: !Create Synchronicity can now check for updates automatically.
+Jun. 21, 2009 - NEW: Option to not propagate updates, fixing a windows-related bug (when copying a file, 2 seconds are added to the actual last-write date).
+Jun. 21, 2009 - NEW: Create Synchronicity can now compute MD5 hashes.
+
+-- Version 1.0 --
+Jun. 22, 2009 - SYN: First stable release, including lots of bug fixes, and speedups.
+Jun. 21, 2009 - UPD: Better display for errors list.
+Jun. 20, 2009 - UPD: Speed up preview list display.
+Jun. 20, 2009 - UPD: Change settings file format a bit.
+Jun. 20, 2009 - FIX: Create settings validation function - better error handling.
+Jun. 18, 2009 - FIX: Deleted directories were emptied but not deleted.
+Jun. 16, 2009 - UPD: Load preview list in a separate thread, speeding up the display of the preview list.
+Jun. 16, 2009 - FIX: Fix settings loading bug.
+
+-- Version 0.2 --
+Jun. 14, 2009 - SYN: Many updates and bug fixes. An icon was found :)
+Jun. 14, 2009 - FIX: Overflow bug.
+Jun. 13, 2009 - UPD: Sorted Lists are not used anymore, resulting in a performance gain as far as settings loading/saving are concerned.
+Jun. 13, 2009 - UPD: The full directory tree is not loaded anymore when displaying settings screen, so that lots of time is saved.
+Jun. 11, 2009 - FIX: Nodes were sometimes displayed twice or more in settings screen.
+Jun. 11, 2009 - FIX: Invoke was called before window handle was created, resulting in a crash.
+
+-- Version 0.1 --
+Jun. 10, 2009 - SYN: First release of Create Synchronicity. Functionality and design are done and working. Lots of testing are still needed.
+
+Many thanks to mohican, Fabien Delpierre, Mauricio Leyzaola, Jamie Schembri, Tim Coysh, Mathias Weinert, Frank Klassen, André Modesto, and Armando Herraz Durango for tireless bug reports, suggestions and testing, and thanks to Florian Haag, Mauricio Leyzaola and André Modesto for their impressive efficiency in completing translations.

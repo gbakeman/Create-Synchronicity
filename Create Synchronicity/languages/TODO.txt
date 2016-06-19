@@ -1,0 +1,25 @@
+amharic:4
+bulgarian:0
+chinese (simplified):9
+chinese (traditional):4
+czech:0
+danish:0
+dutch:4
+english:0
+estonian:14
+french:0
+german:0
+greek:4
+hebrew:29
+hungarian:4
+indonesian:0
+italian:0
+japanese:4
+korean:9
+polish:0
+portuguese:0
+russian:0
+slovene:0
+spanish:0
+swedish:0
+turkish:4

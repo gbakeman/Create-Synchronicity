@@ -1,0 +1,27 @@
+amharic;አማርኛ;am
+bulgarian;Български;bg
+catalan;català;ca
+chinese (simplified);中文(简体);zh-CHS/zh-Hans
+chinese (traditional);中文(繁體);zh-CHT/zh-Hant
+czech;čeština;cs
+danish;dansk;da
+dutch;nederlands;nl
+english;english;en
+estonian;eesti;et
+french;français;fr
+german;deutsch;de
+greek;eλληνικά;el
+hebrew;עִבְרִית;he
+hungarian;magyar;hu
+indonesian;bahasa indonesia;id
+italian;italiano;it
+japanese;日本語;ja
+korean;한국어;ko
+norwegian;norsk;no
+polish;polski;pl
+portuguese;português;pt
+russian;русский язык;ru
+slovene;slovenščina;sl
+spanish;español;es
+swedish;svenska;sv
+turkish;türkçe;tr

@@ -1,0 +1,28 @@
+---- Release checklist ----
+--         Local         --
+- Code -
+* Fix remaining TODOs
+* Update version-string.txt (!Needed by installer!)
+* Update version numbers
+* Update release notes, add a "SYN:" entry
+* Test program on guest session
+* Tag
+* Build installer package and zip file (!from trunk, otherwise version.txt path is wrong!)
+* Test package on Guest session
+
+- Website -
+* Update .htaccess redirection
+* Update PAD file
+* Update help file
+* Uncomment mentions to new version in web pages
+* Update download page and other mentions to zip size (home page, help page, SF)
+
+--         Online        --
+* Upload release files to download server
+* Change default file to new Setup.exe (Create Synchronicity ?.? - Powerful backup solution)
+* Upload website, version.txt, .htaccess, and PAD file
+* Send recap e-mail, post news on SF
+* Post twitter news
+
+--         Later         --
+* Update version.txt

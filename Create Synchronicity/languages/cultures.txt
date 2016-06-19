@@ -1,0 +1,280 @@
+Culture.Name	Culture.DisplayName	Culture.IsNeutralCulture	Culture.NativeName	Culture.EnglishName	Culture.TwoLetterISOLanguageName	Culture.ThreeLetterISOLanguageName	Culture.ThreeLetterWindowsLanguageName
+ar		True	Arabe	العربية	Arabic	ar	ara	ARA
+bg		True	Bulgare	български	Bulgarian	bg	bul	BGR
+ca		True	Catalan	català	Catalan	ca	cat	CAT
+zh-CHS	zh-Hans	True	Chinois (Simplifié)	中文(简体)	Chinese (Simplified)	zh	zho	CHS
+cs		True	Tchèque	čeština	Czech	cs	ces	CSY
+da		True	Danois	dansk	Danish	da	dan	DAN
+de		True	Allemand	Deutsch	German	de	deu	DEU
+el		True	Grec	ελληνικά	Greek	el	ell	ELL
+en		True	Anglais	English	English	en	eng	ENU
+es		True	Espagnol	español	Spanish	es	spa	ESP
+fi		True	Finnois	suomi	Finnish	fi	fin	FIN
+fr		True	Français	français	French	fr	fra	FRA
+he		True	Hébreu	עברית	Hebrew	he	heb	HEB
+hu		True	Hongrois	magyar	Hungarian	hu	hun	HUN
+is		True	Islandais	íslenska	Icelandic	is	isl	ISL
+it		True	Italien	italiano	Italian	it	ita	ITA
+ja		True	Japonais	日本語	Japanese	ja	jpn	JPN
+ko		True	Coréen	한국어	Korean	ko	kor	KOR
+nl		True	Néerlandais	Nederlands	Dutch	nl	nld	NLD
+no		True	Norvégien	norsk	Norwegian	no	nor	NOR
+pl		True	Polonais	polski	Polish	pl	pol	PLK
+pt		True	Portugais	Português	Portuguese	pt	por	PTB
+ro		True	Roumain	română	Romanian	ro	ron	ROM
+ru		True	Russe	русский	Russian	ru	rus	RUS
+hr		True	Croate	hrvatski	Croatian	hr	hrv	HRV
+sk		True	Slovaque	slovenčina	Slovak	sk	slk	SKY
+sq		True	Albanais	shqipe	Albanian	sq	sqi	SQI
+sv		True	Suédois	svenska	Swedish	sv	swe	SVE
+th		True	Thaï	ไทย	Thai	th	tha	THA
+tr		True	Turc	Türkçe	Turkish	tr	tur	TRK
+ur		True	Ourdou	اُردو	Urdu	ur	urd	URD
+id		True	Indonésien	Bahasa Indonesia	Indonesian	id	ind	IND
+uk		True	Ukrainien	україньска	Ukrainian	uk	ukr	UKR
+be		True	Bélarussien	Беларускі	Belarusian	be	bel	BEL
+sl		True	Slovène	slovenski	Slovenian	sl	slv	SLV
+et		True	Estonien	eesti	Estonian	et	est	ETI
+lv		True	Letton	latviešu	Latvian	lv	lav	LVI
+lt		True	Lituanien	lietuvių	Lithuanian	lt	lit	LTH
+fa		True	Perse	فارسى	Persian	fa	fas	FAR
+vi		True	Vietnamien	Tiếng Việt	Vietnamese	vi	vie	VIT
+hy		True	Arménien	Հայերեն	Armenian	hy	hye	HYE
+az		True	Azéri	Azərbaycan­ılı	Azeri	az	aze	AZE
+eu		True	Basque	euskara	Basque	eu	eus	EUQ
+mk		True	Macédonien	македонски јазик	Macedonian	mk	mkd	MKI
+af		True	Afrikaans	Afrikaans	Afrikaans	af	afr	AFK
+ka		True	Géorgien	ქართული	Georgian	ka	kat	KAT
+fo		True	Féroïen	føroyskt	Faroese	fo	fao	FOS
+hi		True	Hindi	हिंदी	Hindi	hi	hin	HIN
+ms		True	Malais	Bahasa Malaysia	Malay	ms	msa	MSL
+kk		True	Kazakh	Қазащb	Kazakh	kk	kaz	KKZ
+ky		True	Kirghiz	Кыргыз	Kyrgyz	ky	kir	KYR
+sw		True	Kiswahili	Kiswahili	Kiswahili	sw	swa	SWK
+uz		True	Ouzbek	U'zbek	Uzbek	uz	uzb	UZB
+tt		True	Tatar	Татар	Tatar	tt	tat	TTT
+pa		True	Pendjabi	ਪੰਜਾਬੀ	Punjabi	pa	pan	PAN
+gu		True	Gujarati	ગુજરાતી	Gujarati	gu	guj	GUJ
+ta		True	Tamoul	தமிழ்	Tamil	ta	tam	TAM
+te		True	Télougou	తెలుగు	Telugu	te	tel	TEL
+kn		True	Kannada	ಕನ್ನಡ	Kannada	kn	kan	KDI
+mr		True	Marathi	मराठी	Marathi	mr	mar	MAR
+sa		True	Sanscrit	संस्कृत	Sanskrit	sa	san	SAN
+mn		True	Mongol	Монгол хэл	Mongolian	mn	mon	MON
+gl		True	Galicien	galego	Galician	gl	glg	GLC
+kok		True	Konkani	कोंकणी	Konkani	kok	kok	KNK
+syr		True	Syriaque	ܣܘܪܝܝܐ	Syriac	syr	syr	SYR
+dv		True	Divehi	ދިވެހިބަސް	Divehi	dv	div	DIV
+		False	Langue indifférente (Pays indifférent)	Invariant Language (Invariant Country)	Invariant Language (Invariant Country)	iv	IVL	IVL
+ar-SA	ar	False	Arabe (Arabie saoudite)	العربية (المملكة العربية السعودية)	Arabic (Saudi Arabia)	ar	ara	ARA
+bg-BG	bg	False	Bulgare (Bulgarie)	български (България)	Bulgarian (Bulgaria)	bg	bul	BGR
+ca-ES	ca	False	Catalan (Catalan)	català (català)	Catalan (Catalan)	ca	cat	CAT
+zh-TW	zh-CHT	False	Chinois (Taïwan)	中文(台灣)	Chinese (Taiwan)	zh	zho	CHT
+cs-CZ	cs	False	Tchèque (République tchèque)	čeština (Česká republika)	Czech (Czech Republic)	cs	ces	CSY
+da-DK	da	False	Danois (Danemark)	dansk (Danmark)	Danish (Denmark)	da	dan	DAN
+de-DE	de	False	Allemand (Allemagne)	Deutsch (Deutschland)	German (Germany)	de	deu	DEU
+el-GR	el	False	Grec (Grèce)	ελληνικά (Ελλάδα)	Greek (Greece)	el	ell	ELL
+en-US	en	False	Anglais (États-Unis)	English (United States)	English (United States)	en	eng	ENU
+fi-FI	fi	False	Finnois (Finlande)	suomi (Suomi)	Finnish (Finland)	fi	fin	FIN
+fr-FR	fr	False	Français (France)	français (France)	French (France)	fr	fra	FRA
+he-IL	he	False	Hébreu (Israël)	עברית (ישראל)	Hebrew (Israel)	he	heb	HEB
+hu-HU	hu	False	Hongrois (Hongrie)	magyar (Magyarország)	Hungarian (Hungary)	hu	hun	HUN
+is-IS	is	False	Islandais (Islande)	íslenska (Ísland)	Icelandic (Iceland)	is	isl	ISL
+it-IT	it	False	Italien (Italie)	italiano (Italia)	Italian (Italy)	it	ita	ITA
+ja-JP	ja	False	Japonais (Japon)	日本語 (日本)	Japanese (Japan)	ja	jpn	JPN
+ko-KR	ko	False	Coréen (Corée)	한국어 (대한민국)	Korean (Korea)	ko	kor	KOR
+nl-NL	nl	False	Néerlandais (Pays-Bas)	Nederlands (Nederland)	Dutch (Netherlands)	nl	nld	NLD
+nb-NO	no	False	Norvégien, Bokmål (Norvège)	norsk, bokmål (Norge)	Norwegian, Bokmål (Norway)	nb	nob	NOR
+pl-PL	pl	False	Polonais (Pologne)	polski (Polska)	Polish (Poland)	pl	pol	PLK
+pt-BR	pt	False	Portugais (Brésil)	Português (Brasil)	Portuguese (Brazil)	pt	por	PTB
+ro-RO	ro	False	Roumain (Roumanie)	română (România)	Romanian (Romania)	ro	ron	ROM
+ru-RU	ru	False	Russe (Russe)	русский (Россия)	Russian (Russia)	ru	rus	RUS
+hr-HR	hr	False	Croate (Croatie)	hrvatski (Hrvatska)	Croatian (Croatia)	hr	hrv	HRV
+sk-SK	sk	False	Slovaque (Slovaquie)	slovenčina (Slovenská republika)	Slovak (Slovakia)	sk	slk	SKY
+sq-AL	sq	False	Albanais (Albanie)	shqipe (Shqipëria)	Albanian (Albania)	sq	sqi	SQI
+sv-SE	sv	False	Suédois (Suède)	svenska (Sverige)	Swedish (Sweden)	sv	swe	SVE
+th-TH	th	False	Thaï (Thaïlande)	ไทย (ไทย)	Thai (Thailand)	th	tha	THA
+tr-TR	tr	False	Turc (Turquie)	Türkçe (Türkiye)	Turkish (Turkey)	tr	tur	TRK
+ur-PK	ur	False	Ourdou (Pakistan)	اُردو (پاکستان)	Urdu (Islamic Republic of Pakistan)	ur	urd	URD
+id-ID	id	False	Indonésien (Indonésie)	Bahasa Indonesia (Indonesia)	Indonesian (Indonesia)	id	ind	IND
+uk-UA	uk	False	Ukrainien (Ukraine)	україньска (Україна)	Ukrainian (Ukraine)	uk	ukr	UKR
+be-BY	be	False	Bélarussien (Bélarus)	Беларускі (Беларусь)	Belarusian (Belarus)	be	bel	BEL
+sl-SI	sl	False	Slovène (Slovénie)	slovenski (Slovenija)	Slovenian (Slovenia)	sl	slv	SLV
+et-EE	et	False	Estonien (Estonie)	eesti (Eesti)	Estonian (Estonia)	et	est	ETI
+lv-LV	lv	False	Letton (Lettonie)	latviešu (Latvija)	Latvian (Latvia)	lv	lav	LVI
+lt-LT	lt	False	Lituanien (Lituanie)	lietuvių (Lietuva)	Lithuanian (Lithuania)	lt	lit	LTH
+fa-IR	fa	False	Perse (Iran)	فارسى (ايران)	Persian (Iran)	fa	fas	FAR
+vi-VN	vi	False	Vietnamien (Vietnam)	Tiếng Việt (Việt Nam)	Vietnamese (Vietnam)	vi	vie	VIT
+hy-AM	hy	False	Arménien (Arménie)	Հայերեն (Հայաստան)	Armenian (Armenia)	hy	hye	HYE
+az-Latn-AZ	az	False	Azéri (Latin, Azerbaïdjan)	Azərbaycan­ılı (Azərbaycanca)	Azeri (Latin, Azerbaijan)	az	aze	AZE
+eu-ES	eu	False	Basque (Basque)	euskara (euskara)	Basque (Basque)	eu	eus	EUQ
+mk-MK	mk	False	Macédonien (Ex-Rép. yougoslave de Macédoine)	македонски јазик (Македонија)	Macedonian (Former Yugoslav Republic of Macedonia)	mk	mkd	MKI
+af-ZA	af	False	Afrikaans (Afrique du Sud)	Afrikaans (Suid Afrika)	Afrikaans (South Africa)	af	afr	AFK
+ka-GE	ka	False	Géorgien (Géorgie)	ქართული (საქართველო)	Georgian (Georgia)	ka	kat	KAT
+fo-FO	fo	False	Féroïen (Îles Féroé)	føroyskt (Føroyar)	Faroese (Faroe Islands)	fo	fao	FOS
+hi-IN	hi	False	Hindi (Inde)	हिंदी (भारत)	Hindi (India)	hi	hin	HIN
+ms-MY	ms	False	Malais (Malaisie)	Bahasa Malaysia (Malaysia)	Malay (Malaysia)	ms	msa	MSL
+kk-KZ	kk	False	Kazakh (Kazakhstan)	Қазақ (Қазақстан)	Kazakh (Kazakhstan)	kk	kaz	KKZ
+ky-KG	ky	False	Kirghiz (Kirghizistan)	Кыргыз (Кыргызстан)	Kyrgyz (Kyrgyzstan)	ky	kir	KYR
+sw-KE	sw	False	Kiswahili (Kenya)	Kiswahili (Kenya)	Kiswahili (Kenya)	sw	swa	SWK
+uz-Latn-UZ	uz	False	Ouzbek (Latin, Ouzbékistan)	U'zbek (U'zbekiston Respublikasi)	Uzbek (Latin, Uzbekistan)	uz	uzb	UZB
+tt-RU	tt	False	Tatar (Russie)	Татар (Россия)	Tatar (Russia)	tt	tat	TTT
+pa-IN	pa	False	Pendjabi (Inde)	ਪੰਜਾਬੀ (ਭਾਰਤ)	Punjabi (India)	pa	pan	PAN
+gu-IN	gu	False	Gujarati (Inde)	ગુજરાતી (ભારત)	Gujarati (India)	gu	guj	GUJ
+ta-IN	ta	False	Tamoul (Inde)	தமிழ் (இந்தியா)	Tamil (India)	ta	tam	TAM
+te-IN	te	False	Télougou (Inde)	తెలుగు (భారత దేశం)	Telugu (India)	te	tel	TEL
+kn-IN	kn	False	Kannada (Inde)	ಕನ್ನಡ (ಭಾರತ)	Kannada (India)	kn	kan	KDI
+mr-IN	mr	False	Marathi (Inde)	मराठी (भारत)	Marathi (India)	mr	mar	MAR
+sa-IN	sa	False	Sanscrit (Inde)	संस्कृत (भारतम्)	Sanskrit (India)	sa	san	SAN
+mn-MN	mn	False	Mongol (Cyrillique, Mongolie)	Монгол хэл (Монгол улс)	Mongolian (Cyrillic, Mongolia)	mn	mon	MON
+gl-ES	gl	False	Galicien (Galicien)	galego (galego)	Galician (Galician)	gl	glg	GLC
+kok-IN	kok	False	Konkani (Inde)	कोंकणी (भारत)	Konkani (India)	kok	kok	KNK
+syr-SY	syr	False	Syriaque (Syrie)	ܣܘܪܝܝܐ (سوريا)	Syriac (Syria)	syr	syr	SYR
+dv-MV	dv	False	Divehi (Maldives)	ދިވެހިބަސް (ދިވެހި ރާއްޖެ)	Divehi (Maldives)	dv	div	DIV
+ar-IQ	ar	False	Arabe (Irak)	العربية (العراق)	Arabic (Iraq)	ar	ara	ARI
+zh-CN	zh-CHS	False	Chinois (République populaire de Chine)	中文(中华人民共和国)	Chinese (People's Republic of China)	zh	zho	CHS
+de-CH	de	False	Allemand (Suisse)	Deutsch (Schweiz)	German (Switzerland)	de	deu	DES
+en-GB	en	False	Anglais (Royaume-Uni)	English (United Kingdom)	English (United Kingdom)	en	eng	ENG
+es-MX	es	False	Espagnol (Mexique)	Español (México)	Spanish (Mexico)	es	spa	ESM
+fr-BE	fr	False	Français (Belgique)	français (Belgique)	French (Belgium)	fr	fra	FRB
+it-CH	it	False	Italien (Suisse)	italiano (Svizzera)	Italian (Switzerland)	it	ita	ITS
+nl-BE	nl	False	Néerlandais (Belgique)	Nederlands (België)	Dutch (Belgium)	nl	nld	NLB
+nn-NO	no	False	Norvégien, Nynorsk (Norvège)	norsk, nynorsk (Noreg)	Norwegian, Nynorsk (Norway)	nn	nno	NON
+pt-PT	pt	False	Portugais (Portugal)	português (Portugal)	Portuguese (Portugal)	pt	por	PTG
+sr-Latn-CS	sr	False	Serbian (Latin, Serbia and Montenegro (Former))	srpski (Srbija i Crna Gora (Prethodno))	Serbian (Latin, Serbia and Montenegro (Former))	sr	srp	SRL
+sv-FI	sv	False	Suédois (Finlande)	svenska (Finland)	Swedish (Finland)	sv	swe	SVF
+az-Cyrl-AZ	az	False	Azéri (Cyrillique, Azerbaïdjan)	Азәрбајҹан (Азәрбајҹан)	Azeri (Cyrillic, Azerbaijan)	az	aze	AZE
+ms-BN	ms	False	Malais (Brunei Darussalam)	Bahasa Malaysia (Brunei Darussalam)	Malay (Brunei Darussalam)	ms	msa	MSB
+uz-Cyrl-UZ	uz	False	Ouzbek (Cyrillique, Ouzbékistan)	Ўзбек (Ўзбекистон)	Uzbek (Cyrillic, Uzbekistan)	uz	uzb	UZB
+ar-EG	ar	False	Arabe (Égypte)	العربية (مصر)	Arabic (Egypt)	ar	ara	ARE
+zh-HK	zh-CHT	False	Chinois (Hong Kong RAS)	中文(香港特别行政區)	Chinese (Hong Kong S.A.R.)	zh	zho	ZHH
+de-AT	de	False	Allemand (Autriche)	Deutsch (Österreich)	German (Austria)	de	deu	DEA
+en-AU	en	False	Anglais (Australie)	English (Australia)	English (Australia)	en	eng	ENA
+es-ES	es	False	Espagnol (Espagne)	español (España)	Spanish (Spain)	es	spa	ESN
+fr-CA	fr	False	Français (Canada)	français (Canada)	French (Canada)	fr	fra	FRC
+sr-Cyrl-CS	sr	False	Serbian (Cyrillic, Serbia and Montenegro (Former))	српски (Србија и Црна Гора (Претходно))	Serbian (Cyrillic, Serbia and Montenegro (Former))	sr	srp	SRB
+ar-LY	ar	False	Arabe (Libye)	العربية (ليبيا)	Arabic (Libya)	ar	ara	ARL
+zh-SG	zh-CHS	False	Chinois (Singapour)	中文(新加坡)	Chinese (Singapore)	zh	zho	ZHI
+de-LU	de	False	Allemand (Luxembourg)	Deutsch (Luxemburg)	German (Luxembourg)	de	deu	DEL
+en-CA	en	False	Anglais (Canada)	English (Canada)	English (Canada)	en	eng	ENC
+es-GT	es	False	Espagnol (Guatemala)	Español (Guatemala)	Spanish (Guatemala)	es	spa	ESG
+fr-CH	fr	False	Français (Suisse)	français (Suisse)	French (Switzerland)	fr	fra	FRS
+ar-DZ	ar	False	Arabe (Algérie)	العربية (الجزائر)	Arabic (Algeria)	ar	ara	ARG
+zh-MO	zh-CHT	False	Chinois (Macao RAS)	中文(澳門特别行政區)	Chinese (Macao S.A.R.)	zh	zho	ZHM
+de-LI	de	False	Allemand (Liechtenstein)	Deutsch (Liechtenstein)	German (Liechtenstein)	de	deu	DEC
+en-NZ	en	False	Anglais (Nouvelle-Zélande)	English (New Zealand)	English (New Zealand)	en	eng	ENZ
+es-CR	es	False	Espagnol (Costa Rica)	Español (Costa Rica)	Spanish (Costa Rica)	es	spa	ESC
+fr-LU	fr	False	Français (Luxembourg)	français (Luxembourg)	French (Luxembourg)	fr	fra	FRL
+ar-MA	ar	False	Arabe (Maroc)	العربية (المملكة المغربية)	Arabic (Morocco)	ar	ara	ARM
+en-IE	en	False	Anglais (Irlande)	English (Eire)	English (Ireland)	en	eng	ENI
+es-PA	es	False	Espagnol (Panama)	Español (Panamá)	Spanish (Panama)	es	spa	ESA
+fr-MC	fr	False	Français (Monaco)	français (Principauté de Monaco)	French (Principality of Monaco)	fr	fra	FRM
+ar-TN	ar	False	Arabe (Tunisie)	العربية (تونس)	Arabic (Tunisia)	ar	ara	ART
+en-ZA	en	False	Anglais (Afrique du Sud)	English (South Africa)	English (South Africa)	en	eng	ENS
+es-DO	es	False	Espagnol (République dominicaine)	Español (República Dominicana)	Spanish (Dominican Republic)	es	spa	ESD
+ar-OM	ar	False	Arabe (Oman)	العربية (عمان)	Arabic (Oman)	ar	ara	ARO
+en-JM	en	False	Anglais (Jamaïque)	English (Jamaica)	English (Jamaica)	en	eng	ENJ
+es-VE	es	False	Espagnol (Venezuela)	Español (Republica Bolivariana de Venezuela)	Spanish (Venezuela)	es	spa	ESV
+ar-YE	ar	False	Arabe (Yémen)	العربية (اليمن)	Arabic (Yemen)	ar	ara	ARY
+en-029	en	False	Anglais (Caraïbes)	English (Caribbean)	English (Caribbean)	en	eng	ENB
+es-CO	es	False	Espagnol (Colombie)	Español (Colombia)	Spanish (Colombia)	es	spa	ESO
+ar-SY	ar	False	Arabe (Syrie)	العربية (سوريا)	Arabic (Syria)	ar	ara	ARS
+en-BZ	en	False	Anglais (Belize)	English (Belize)	English (Belize)	en	eng	ENL
+es-PE	es	False	Espagnol (Pérou)	Español (Perú)	Spanish (Peru)	es	spa	ESR
+ar-JO	ar	False	Arabe (Jordanie)	العربية (الأردن)	Arabic (Jordan)	ar	ara	ARJ
+en-TT	en	False	Anglais (Trinité-et-Tobago)	English (Trinidad y Tobago)	English (Trinidad and Tobago)	en	eng	ENT
+es-AR	es	False	Espagnol (Argentine)	Español (Argentina)	Spanish (Argentina)	es	spa	ESS
+ar-LB	ar	False	Arabe (Liban)	العربية (لبنان)	Arabic (Lebanon)	ar	ara	ARB
+en-ZW	en	False	Anglais (Zimbabwe)	English (Zimbabwe)	English (Zimbabwe)	en	eng	ENW
+es-EC	es	False	Espagnol (Équateur)	Español (Ecuador)	Spanish (Ecuador)	es	spa	ESF
+ar-KW	ar	False	Arabe (Koweït)	العربية (الكويت)	Arabic (Kuwait)	ar	ara	ARK
+en-PH	en	False	Anglais (Philippines)	English (Philippines)	English (Republic of the Philippines)	en	eng	ENP
+es-CL	es	False	Espagnol (Chili)	Español (Chile)	Spanish (Chile)	es	spa	ESL
+ar-AE	ar	False	Arabe (E.A.U.)	العربية (الإمارات العربية المتحدة)	Arabic (U.A.E.)	ar	ara	ARU
+es-UY	es	False	Espagnol (Uruguay)	Español (Uruguay)	Spanish (Uruguay)	es	spa	ESY
+ar-BH	ar	False	Arabe (Bahreïn)	العربية (البحرين)	Arabic (Bahrain)	ar	ara	ARH
+es-PY	es	False	Espagnol (Paraguay)	Español (Paraguay)	Spanish (Paraguay)	es	spa	ESZ
+ar-QA	ar	False	Arabe (Qatar)	العربية (قطر)	Arabic (Qatar)	ar	ara	ARQ
+es-BO	es	False	Espagnol (Bolivie)	Español (Bolivia)	Spanish (Bolivia)	es	spa	ESB
+es-SV	es	False	Espagnol (Salvador)	Español (El Salvador)	Spanish (El Salvador)	es	spa	ESE
+es-HN	es	False	Espagnol (Honduras)	Español (Honduras)	Spanish (Honduras)	es	spa	ESH
+es-NI	es	False	Espagnol (Nicaragua)	Español (Nicaragua)	Spanish (Nicaragua)	es	spa	ESI
+es-PR	es	False	Espagnol (Porto Rico)	Español (Puerto Rico)	Spanish (Puerto Rico)	es	spa	ESU
+zh-CHT	zh-Hant	True	Chinois (Traditionnel)	中文(繁體)	Chinese (Traditional)	zh	zho	CHT
+sr		True	Serbe	srpski	Serbian	sr	srp	SRB
+am-ET		False	Amharique (Éthiopie)	አማርኛ (ኢትዮጵያ)	Amharic (Ethiopia)	am	amh	AMH
+tzm-Latn-DZ		False	Tamazight (latin, Algérie)	Tamazight (Djazaïr)	Tamazight (Latin) (Algeria)	tzm	tzm	TZM
+iu-Latn-CA		False	Inuktitut (latin, Canada)	Inuktitut (kanata)	Inuktitut (Latin) (Canada)	iu	iku	IUK
+sma-NO		False	Same du sud (Norvège)	åarjelsaemiengiele (Nöörje)	Sami (Southern) (Norway)	sma	sma	SMA
+mn-Mong-CN		False	Mongol (mongol traditionnel, RPC)	ᠮᠤᠨᠭᠭᠤᠯ ᠬᠡᠯᠡ (ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ)	Mongolian (Traditional Mongolian) (People's Republic of China)	mn	mon	MNG
+gd-GB		False	Gaélique écossais (Royaume-Uni)	Gàidhlig (An Rìoghachd Aonaichte)	Scottish Gaelic (United Kingdom)	gd	gla	GLA
+en-MY	en	False	Anglais (Malaisie)	English (Malaysia)	English (Malaysia)	en	eng	ENM
+prs-AF		False	Dari (Afghanistan)	درى (افغانستان)	Dari (Afghanistan)	prs	prs	PRS
+bn-BD		False	Bengali (Bangladesh)	বাংলা (বাংলাদেশ)	Bengali (Bangladesh)	bn	bng	BNB
+wo-SN		False	Wolof (Sénégal)	Wolof (Sénégal)	Wolof (Senegal)	wo	wol	WOL
+rw-RW		False	Kinyarwanda (Rwanda)	Kinyarwanda (Rwanda)	Kinyarwanda (Rwanda)	rw	kin	KIN
+qut-GT		False	Quiché (Guatemala)	K'iche (Guatemala)	K'iche (Guatemala)	qut	qut	QUT
+sah-RU		False	Iakoute (Russie)	саха (Россия)	Yakut (Russia)	sah	sah	SAH
+gsw-FR		False	Alsacien (France)	Elsässisch (Frànkrisch)	Alsatian (France)	gsw	gsw	GSW
+co-FR		False	Corse (France)	Corsu (France)	Corsican (France)	co	cos	COS
+oc-FR		False	Occitan (France)	Occitan (França)	Occitan (France)	oc	oci	OCI
+mi-NZ		False	Maori (Nouvelle-Zélande)	Reo Māori (Aotearoa)	Maori (New Zealand)	mi	mri	MRI
+ga-IE		False	Irlandais (Irlande)	Gaeilge (Éire)	Irish (Ireland)	ga	gle	IRE
+se-SE		False	Same du nord (Suède)	davvisámegiella (Ruoŧŧa)	Sami (Northern) (Sweden)	se	smf	SMF
+br-FR		False	Breton (France)	brezhoneg (Frañs)	Breton (France)	br	bre	BRE
+smn-FI		False	Same d’Inari (Finlande)	sämikielâ (Suomâ)	Sami (Inari) (Finland)	smn	smn	SMN
+moh-CA		False	Mohawk (Mohawk)	Kanien'kéha (Canada)	Mohawk (Canada)	moh	moh	MWK
+arn-CL		False	Mapudungun (Chili)	Mapudungun (Chile)	Mapudungun (Chile)	arn	arn	MPD
+ii-CN		False	Yi (RPC)	ꆈꌠꁱꂷ (ꍏꉸꏓꂱꇭꉼꇩ)	Yi (People's Republic of China)	ii	iii	III
+dsb-DE		False	Bas-sorabe (Allemagne)	dolnoserbšćina (Nimska)	Lower Sorbian (Germany)	dsb	dsb	DSB
+ig-NG		False	Igbo (Nigeria)	Igbo (Nigeria)	Igbo (Nigeria)	ig	ibo	IBO
+kl-GL		False	Groenlandais (Groenland)	kalaallisut (Kalaallit Nunaat)	Greenlandic (Greenland)	kl	kal	KAL
+lb-LU		False	Luxembourgeois (Luxembourg)	Lëtzebuergesch (Luxembourg)	Luxembourgish (Luxembourg)	lb	ltz	LBX
+ba-RU		False	Bachkir (Russie)	Башҡорт (Россия)	Bashkir (Russia)	ba	bak	BAS
+nso-ZA		False	Sesotho sa Leboa (Afrique du Sud)	Sesotho sa Leboa (Afrika Borwa)	Sesotho sa Leboa (South Africa)	nso	nso	NSO
+quz-BO		False	Quechua (Bolivie)	runasimi (Bolivia Suyu)	Quechua (Bolivia)	quz	qub	QUB
+yo-NG		False	Yorouba (Nigeria)	Yoruba (Nigeria)	Yoruba (Nigeria)	yo	yor	YOR
+ha-Latn-NG		False	Haoussa (latin, Nigeria)	Hausa (Nigeria)	Hausa (Latin) (Nigeria)	ha	hau	HAU
+fil-PH		False	Filipino (Philippines)	Filipino (Pilipinas)	Filipino (Philippines)	fil	fil	FPO
+ps-AF		False	Pachtou (Afghanistan)	پښتو (افغانستان)	Pashto (Afghanistan)	ps	pus	PAS
+fy-NL		False	Frison (Pays-Bas)	Frysk (Nederlân)	Frisian (Netherlands)	fy	fry	FYN
+ne-NP		False	Népalais (Népal)	नेपाली (नेपाल)	Nepali (Nepal)	ne	nep	NEP
+se-NO		False	Same du nord (Norvège)	davvisámegiella (Norga)	Sami (Northern) (Norway)	se	sme	SME
+iu-Cans-CA		False	Inuktitut (syllabique, Canada)	ᐃᓄᒃᑎᑐᑦ (ᑲᓇᑕ)	Inuktitut (Syllabics) (Canada)	iu	iku	IUS
+sr-Latn-RS		False	Serbe (latin, Serbie)	srpski (Srbija)	Serbian (Latin) (Serbia)	sr	srp	SRM
+si-LK		False	Cinghalais (Sri Lanka)	සිංහ (ශ්‍රී ලංකා)	Sinhala (Sri Lanka)	si	sin	SIN
+sr-Cyrl-RS		False	Serbe (cyrillique, Serbie)	српски (Србија)	Serbian (Cyrillic) (Serbia)	sr	srp	SRO
+lo-LA		False	Lao (RDP Lao)	ລາວ (ສ.ປ.ປ. ລາວ)	Lao (Lao P.D.R.)	lo	lao	LAO
+km-KH		False	Khmer (Cambodge)	ខ្មែរ (កម្ពុជា)	Khmer (Cambodia)	km	khm	KHM
+cy-GB		False	Gallois (Royaume-Uni)	Cymraeg (y Deyrnas Unedig)	Welsh (United Kingdom)	cy	cym	CYM
+bo-CN		False	Tibétain (RPC)	བོད་ཡིག (ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།)	Tibetan (People's Republic of China)	bo	bod	BOB
+sms-FI		False	Same de Skolt (Finlande)	sääm´ǩiõll (Lää´ddjânnam)	Sami (Skolt) (Finland)	sms	sms	SMS
+as-IN		False	Assamais (Inde)	অসমীয়া (ভাৰত)	Assamese (India)	as	asm	ASM
+ml-IN		False	Malayalam (Inde)	മലയാളം (ഭാരതം)	Malayalam (India)	ml	mym	MYM
+en-IN	en	False	Anglais (Inde)	English (India)	English (India)	en	eng	ENN
+or-IN		False	Oriya (Inde)	ଓଡ଼ିଆ (ଭାରତ)	Oriya (India)	or	ori	ORI
+bn-IN		False	Bengali (Inde)	বাংলা (ভারত)	Bengali (India)	bn	bng	BNG
+tk-TM		False	Turkmène (Turkménistan)	türkmençe (Türkmenistan)	Turkmen (Turkmenistan)	tk	tuk	TUK
+bs-Latn-BA		False	Bosniaque (latin, Bosnie-Herzégovine)	bosanski (Bosna i Hercegovina)	Bosnian (Latin) (Bosnia and Herzegovina)	bs	bsb	BSB
+mt-MT		False	Maltais (Malte)	Malti (Malta)	Maltese (Malta)	mt	mlt	MLT
+sr-Cyrl-ME		False	Serbe (cyrillique, Monténégro)	српски (Црна Гора)	Serbian (Cyrillic) (Montenegro)	sr	srp	SRQ
+se-FI		False	Same du nord (Finlande)	davvisámegiella (Suopma)	Sami (Northern) (Finland)	se	smg	SMG
+zu-ZA		False	Zoulou (Afrique du Sud)	isiZulu (iNingizimu Afrika)	isiZulu (South Africa)	zu	zul	ZUL
+xh-ZA		False	Xhosa (Afrique du Sud)	isiXhosa (uMzantsi Afrika)	isiXhosa (South Africa)	xh	xho	XHO
+tn-ZA		False	Setswana (Afrique du Sud)	Setswana (Aforika Borwa)	Setswana (South Africa)	tn	tsn	TSN
+hsb-DE		False	Haut-sorabe (Allemagne)	hornjoserbšćina (Němska)	Upper Sorbian (Germany)	hsb	hsb	HSB
+bs-Cyrl-BA		False	Bosniaque (cyrillique, Bosnie-Herzégovine)	босански (Босна и Херцеговина)	Bosnian (Cyrillic) (Bosnia and Herzegovina)	bs	bsc	BSC
+tg-Cyrl-TJ		False	Tadjik (cyrillique, Tadjikistan)	Тоҷикӣ (Тоҷикистон)	Tajik (Cyrillic) (Tajikistan)	tg	tgk	TAJ
+sr-Latn-BA		False	Serbe (latin, Bosnie-Herzégovine)	srpski (Bosna i Hercegovina)	Serbian (Latin) (Bosnia and Herzegovina)	sr	srs	SRS
+smj-NO		False	Same de Lule (Norvège)	julevusámegiella (Vuodna)	Sami (Lule) (Norway)	smj	smj	SMJ
+rm-CH		False	Romanche (Suisse)	Rumantsch (Svizra)	Romansh (Switzerland)	rm	roh	RMC
+smj-SE		False	Same de Lule (Suède)	julevusámegiella (Svierik)	Sami (Lule) (Sweden)	smj	smk	SMK
+quz-EC		False	Quechua (Équateur)	runasimi (Ecuador Suyu)	Quechua (Ecuador)	quz	que	QUE
+quz-PE		False	Quechua (Pérou)	runasimi (Peru Suyu)	Quechua (Peru)	quz	qup	QUP
+hr-BA	hr	False	Croate (latin, Bosnie-Herzégovine)	hrvatski (Bosna i Hercegovina)	Croatian (Latin) (Bosnia and Herzegovina)	hr	hrb	HRB
+sr-Latn-ME		False	Serbe (latin, Monténégro)	srpski (Crna Gora)	Serbian (Latin) (Montenegro)	sr	srp	SRP
+sma-SE		False	Same du sud (Suède)	åarjelsaemiengiele (Sveerje)	Sami (Southern) (Sweden)	sma	smb	SMB
+en-SG	en	False	Anglais (Singapour)	English (Singapore)	English (Singapore)	en	eng	ENE
+ug-CN		False	Ouïgour (RPC)	ئۇيغۇرچە (جۇڭخۇا خەلق جۇمھۇرىيىتى)	Uyghur (People's Republic of China)	ug	uig	UIG
+sr-Cyrl-BA		False	Serbe (cyrillique, Bosnie-Herzégovine)	српски (Босна и Херцеговина)	Serbian (Cyrillic) (Bosnia and Herzegovina)	sr	srn	SRN
+es-US	es	False	Espagnol (États-Unis)	Español (Estados Unidos)	Spanish (United States)	es	spa	EST

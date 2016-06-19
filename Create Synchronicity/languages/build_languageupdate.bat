@@ -1,0 +1,1 @@
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\vbc.exe /out:"language_update.exe" language_update.vb
