@@ -1,1 +1,0 @@
-mono ".\Create Synchronicity.exe"
