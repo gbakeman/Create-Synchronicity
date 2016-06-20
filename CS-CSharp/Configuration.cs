@@ -56,6 +56,8 @@ namespace CreateSync
 
 		public const string AutoStartupRegistration = "Auto startup registration";
 		//Program files
+		//In VB version config files were stored in user profile, but this app is supposed to be portable? I think they
+		//ought to be stored relative to the executable then.
 		public const string ConfigFolderName = "config";
 		public const string LogFolderName = "log";
 		public const string SettingsFileName = "mainconfig.bin";
@@ -90,7 +92,7 @@ public const bool Debug = false;
 
 		public Settings Load()
 		{
-			FileStream settingsFile = File.Open(Path.Combine(ConfigRootDir, MainConfigFile), FileMode.OpenOrCreate,
+			FileStream settingsFile = File.Open(Path.Combine(ConfigFolderName, MainConfigFile), FileMode.OpenOrCreate,
 				FileAccess.Read, FileShare.None);
 		}
 		/*
