@@ -314,7 +314,7 @@ sealed class ConfigHandler
 
 	public void RegisterBoot()
 	{
-		if (ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoStartupRegistration, true))
+		if (Main.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoStartupRegistration, true))
 		{
 			if (Microsoft.Win32.Registry.GetValue(ProgramSetting.RegistryRootedBootKey, ProgramSetting.RegistryBootVal, null) == null)
 			{
@@ -367,12 +367,12 @@ struct CommandLine
 	public static void ReadArgs(List<string> ArgsList)
 	{
 #if DEBUG
-		ProgramConfig.LogDebugEvent("Parsing command line settings");
+		Main.ProgramConfig.LogDebugEvent("Parsing command line settings");
 		foreach (string Param in ArgsList)
 		{
-			ProgramConfig.LogDebugEvent("  Got: " + Param);
+			Main.ProgramConfig.LogDebugEvent("  Got: " + Param);
 		}
-		ProgramConfig.LogDebugEvent("Done.");
+		Main.ProgramConfig.LogDebugEvent("Done.");
 #endif
 
 		if (ArgsList.Count > 1)
