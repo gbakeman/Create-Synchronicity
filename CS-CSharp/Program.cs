@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 //TODO: Complete port
 
@@ -19,7 +21,7 @@ namespace CreateSync
 			Application.Run(new Form1());
 		}
 	}*/
-	static class Main
+	static class Program
 	{
 		static internal LanguageHandler Translation;
 		static internal ConfigHandler ProgramConfig;
@@ -27,9 +29,9 @@ namespace CreateSync
 		static internal bool ReloadNeeded;
 
 		static internal MainForm MainFormInstance;
-		static internal Drawing.Font SmallFont;
+		static internal Font SmallFont;
 
-		static internal Drawing.Font LargeFont;
+		static internal Font LargeFont;
 		static internal MessageLoop MsgLoop;
 		internal delegate void Action();
 		//LATER: replace with .Net 4.0 standards.
@@ -49,17 +51,19 @@ namespace CreateSync
 			}
 			catch (Exception Ex)
 			{
-				if (MessageBox.Show("A critical error has occured. Can we upload the error log? " + Environment.NewLine + "Here's what we would send:" + Environment.NewLine + Environment.NewLine + Ex.ToString + Environment.NewLine + Environment.NewLine + "If not, you can copy this message using Ctrl+C and send it to createsoftware@users.sourceforge.net." + Environment.NewLine, "Critical error", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				if (MessageBox.Show("A critical error has occured. Can we upload the error log? " + Environment.NewLine + "Here's what we would send:" + Environment.NewLine + Environment.NewLine + Ex.ToString() + Environment.NewLine + Environment.NewLine + "If not, you can copy this message using Ctrl+C and send it to createsoftware@users.sourceforge.net." + Environment.NewLine, "Critical error", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
-					Net.WebClient ReportingClient = new Net.WebClient();
+					System.Net.WebClient ReportingClient = new System.Net.WebClient();
 					try
 					{
+						System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 						ReportingClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-						MessageBox.Show(ReportingClient.UploadString(Branding.Web + "code/bug.php", "POST", "version=" + Application.ProductVersion + "/" + Revision.Build + "&msg=" + Ex.ToString), "Bug report submitted!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						MessageBox.Show(ReportingClient.UploadString(Branding.Web + "code/bug.php", "POST",
+							"version=" + Application.ProductVersion + "/" + assembly.GetName().Version.Build + "&msg=" + Ex.ToString()), "Bug report submitted!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					}
-					catch (Net.WebException SubEx)
+					catch (System.Net.WebException SubEx)
 					{
-						MessageBox.Show("Unable to submit report. Plead send the following to createsoftware@users.sourceforge.net (Ctrl+C): " + Environment.NewLine + Ex.ToString, "Unable to submit report", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show("Unable to submit report. Plead send the following to createsoftware@users.sourceforge.net (Ctrl+C): " + Environment.NewLine + Ex.ToString(), "Unable to submit report", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 					finally
 					{
@@ -77,7 +81,7 @@ namespace CreateSync
 		public bool ExitNeeded;
 
 		//= Nothing
-		private Threading.Mutex Blocker;
+		private System.Threading.Mutex Blocker;
 		//= Nothing
 		List<SchedulerEntry> ScheduledProfiles = new List<SchedulerEntry>();
 
@@ -89,9 +93,9 @@ namespace CreateSync
 			InitializeSharedObjects();
 
 			// Start logging
-			ProgramConfig.LogAppEvent(new string('=', 20));
-			ProgramConfig.LogAppEvent("Program started: " + Application.StartupPath);
-			ProgramConfig.LogAppEvent(string.Format("Profiles folder: {0}.", ProgramConfig.ConfigRootDir));
+			Program.ProgramConfig.LogAppEvent(new string('=', 20));
+			Program.ProgramConfig.LogAppEvent("Program started: " + Application.StartupPath);
+			Program.ProgramConfig.LogAppEvent(string.Format("Profiles folder: {0}.", Program.ProgramConfig.ConfigRootDir));
 			Interaction.ShowDebug(Translation.Translate("\\DEBUG_WARNING"), Translation.Translate("\\DEBUG_MODE"));
 
 			//Read command line settings
@@ -133,7 +137,7 @@ namespace CreateSync
 				Interaction.ShowMsg(string.Format("Create Synchronicity, version {1}.{0}{0}Profiles folder: \"{2}\".{0}{0}Available commands: see manual.{0}{0}License information: See \"Release notes.txt\".{0}{0}Full manual: See {3}.{0}{0}You can support this software! See {4}.{0}{0}Happy syncing!", Environment.NewLine, Application.ProductVersion, ProgramConfig.ConfigRootDir, Branding.Help, Branding.Contribute), "Help!");
 #if DEBUG
 				Text.StringBuilder FreeSpace = new Text.StringBuilder();
-				foreach (IO.DriveInfo Drive in IO.DriveInfo.GetDrives())
+				foreach (DriveInfo Drive in DriveInfo.GetDrives())
 				{
 					if (Drive.IsReady)
 					{
@@ -232,9 +236,9 @@ namespace CreateSync
 			}
 
 			// Create required folders
-			IO.Directory.CreateDirectory(ProgramConfig.LogRootDir);
-			IO.Directory.CreateDirectory(ProgramConfig.ConfigRootDir);
-			IO.Directory.CreateDirectory(ProgramConfig.LanguageRootDir);
+			Directory.CreateDirectory(ProgramConfig.LogRootDir);
+			Directory.CreateDirectory(ProgramConfig.ConfigRootDir);
+			Directory.CreateDirectory(ProgramConfig.LanguageRootDir);
 		}
 
 		public static void InitializeForms()
@@ -271,9 +275,9 @@ namespace CreateSync
 			Profiles.Clear();
 			//Initialized in InitializeSharedObjects
 
-			foreach (string ConfigFile in IO.Directory.GetFiles(ProgramConfig.ConfigRootDir, "*.sync"))
+			foreach (string ConfigFile in Directory.GetFiles(ProgramConfig.ConfigRootDir, "*.sync"))
 			{
-				string Name = IO.Path.GetFileNameWithoutExtension(ConfigFile);
+				string Name = Path.GetFileNameWithoutExtension(ConfigFile);
 				Profiles.Add(Name, new ProfileHandler(Name));
 			}
 		}
@@ -579,8 +583,8 @@ namespace CreateSync
 #if DEBUG
 		public static void Explore(string Path)
 		{
-			Path = IO.Path.GetFullPath(Path);
-			using (IO.StreamWriter Writer = new IO.StreamWriter(IO.Path.Combine(ProgramConfig.LogRootDir, "scan-results.txt"), true))
+			Path = Path.GetFullPath(Path);
+			using (StreamWriter Writer = new StreamWriter(Path.Combine(ProgramConfig.LogRootDir, "scan-results.txt"), true))
 			{
 				Writer.WriteLine("== Exploring " + Path);
 
@@ -602,20 +606,20 @@ namespace CreateSync
 			}
 		}
 
-		public static void ExploreTree(string Path, int Depth, IO.StreamWriter Stream)
+		public static void ExploreTree(string Path, int Depth, StreamWriter Stream)
 		{
 			string Indentation = "".PadLeft(Depth * 2);
 
-			foreach (string File in IO.Directory.GetFiles(Path))
+			foreach (string File in Directory.GetFiles(Path))
 			{
 				try
 				{
 					Stream.Write(Indentation);
 					Stream.Write(File);
-					Stream.Write("\t" + IO.File.Exists(File));
-					Stream.Write("\t" + IO.File.GetAttributes(File).ToString());
-					Stream.Write("\t" + Interaction.FormatDate(IO.File.GetCreationTimeUtc(File)));
-					Stream.Write("\t" + Interaction.FormatDate(IO.File.GetLastWriteTimeUtc(File)));
+					Stream.Write("\t" + File.Exists(File));
+					Stream.Write("\t" + File.GetAttributes(File).ToString());
+					Stream.Write("\t" + Interaction.FormatDate(File.GetCreationTimeUtc(File)));
+					Stream.Write("\t" + Interaction.FormatDate(File.GetLastWriteTimeUtc(File)));
 					Stream.WriteLine();
 				}
 				catch (Exception ex)
@@ -624,16 +628,16 @@ namespace CreateSync
 				}
 			}
 
-			foreach (string Folder in IO.Directory.GetDirectories(Path))
+			foreach (string Folder in Directory.GetDirectories(Path))
 			{
 				try
 				{
 					Stream.Write(Indentation);
 					Stream.Write(Folder);
-					Stream.Write("\t" + IO.Directory.Exists(Folder));
-					Stream.Write("\t" + IO.File.GetAttributes(Folder).ToString());
-					Stream.Write("\t" + Interaction.FormatDate(IO.Directory.GetCreationTimeUtc(Folder)));
-					Stream.Write("\t" + Interaction.FormatDate(IO.Directory.GetLastWriteTimeUtc(Folder)));
+					Stream.Write("\t" + Directory.Exists(Folder));
+					Stream.Write("\t" + File.GetAttributes(Folder).ToString());
+					Stream.Write("\t" + Interaction.FormatDate(Directory.GetCreationTimeUtc(Folder)));
+					Stream.Write("\t" + Interaction.FormatDate(Directory.GetLastWriteTimeUtc(Folder)));
 					Stream.WriteLine();
 				}
 				catch (Exception ex)

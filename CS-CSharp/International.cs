@@ -38,17 +38,17 @@ namespace CreateSync
 
 		private static string GetLanguageFilePath(string LanguageName)
 		{
-			return Main.ProgramConfig.LanguageRootDir + ProgramSetting.DirSep + NewFilename(LanguageName) + ".lng";
+			return Program.ProgramConfig.LanguageRootDir + ProgramSetting.DirSep + NewFilename(LanguageName) + ".lng";
 		}
 
 		private LanguageHandler()
 		{
-			Main.ProgramConfig.LoadProgramSettings();
-			Directory.CreateDirectory(Main.ProgramConfig.LanguageRootDir);
+			Program.ProgramConfig.LoadProgramSettings();
+			Directory.CreateDirectory(Program.ProgramConfig.LanguageRootDir);
 
 			Strings = new Dictionary<string, string>();
 
-			string DictFile = GetLanguageFilePath(Main.ProgramConfig.GetProgramSetting<string>(ProgramSetting.Language, ProgramSetting.DefaultLanguage));
+			string DictFile = GetLanguageFilePath(Program.ProgramConfig.GetProgramSetting<string>(ProgramSetting.Language, ProgramSetting.DefaultLanguage));
 
 			if (!File.Exists(DictFile))
 			{
@@ -174,9 +174,9 @@ namespace CreateSync
 		{
 			Dictionary<string, LangInfo> LanguagesInfo = new Dictionary<string, LangInfo>();
 
-			if (File.Exists(Main.ProgramConfig.LocalNamesFile))
+			if (File.Exists(Program.ProgramConfig.LocalNamesFile))
 			{
-				using (StreamReader PropsReader = new StreamReader(Main.ProgramConfig.LocalNamesFile))
+				using (StreamReader PropsReader = new StreamReader(Program.ProgramConfig.LocalNamesFile))
 				{
 					while (!PropsReader.EndOfStream)
 					{
@@ -200,15 +200,15 @@ namespace CreateSync
 
 			System.Globalization.CultureInfo CurrentCulture = System.Globalization.CultureInfo.InstalledUICulture;
 
-			Main.ProgramConfig.LoadProgramSettings();
-			string CurProgramLanguage = NewFilename(Main.ProgramConfig.GetProgramSetting<string>(ProgramSetting.Language, ""));
+			Program.ProgramConfig.LoadProgramSettings();
+			string CurProgramLanguage = NewFilename(Program.ProgramConfig.GetProgramSetting<string>(ProgramSetting.Language, ""));
 
 			//Merge fr-CA, fr-FR, and so on to fr, and distinguish zh-Hans and zh-Hant.
 			if (!CurrentCulture.IsNeutralCulture)
 				CurrentCulture = CurrentCulture.Parent;
 
 			LanguagesComboBox.Items.Clear();
-			foreach (string File in Directory.GetFiles(Main.ProgramConfig.LanguageRootDir, "*.lng"))
+			foreach (string File in Directory.GetFiles(Program.ProgramConfig.LanguageRootDir, "*.lng"))
 			{
 				string EnglishName = Path.GetFileNameWithoutExtension(File);
 				string NewItemText = EnglishName;

@@ -3,6 +3,7 @@
 using CreateSync;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 static internal class ProgramSetting
@@ -139,26 +140,26 @@ sealed class ConfigHandler
 			Application.StartupPath + ProgramSetting.DirSep + ProgramSetting.LogFolderName,
 			Application.StartupPath + ProgramSetting.DirSep + ProgramSetting.ConfigFolderName
 		};
-		bool ProgramPathExists = System.IO.Directory.Exists(Application.StartupPath + ProgramSetting.DirSep + ProgramSetting.ConfigFolderName);
+		bool ProgramPathExists = Directory.Exists(Application.StartupPath + ProgramSetting.DirSep + ProgramSetting.ConfigFolderName);
 		List<string> ToDelete = new List<string>();
 
 		try
 		{
 			foreach (string Folder in WriteNeededFolders)
 			{
-				if (!System.IO.Directory.Exists(Folder))
+				if (!Directory.Exists(Folder))
 					continue;
 
-				string TestPath = Folder + ProgramSetting.DirSep + "write-permissions." + System.IO.Path.GetRandomFileName();
-				System.IO.File.Create(TestPath).Close();
+				string TestPath = Folder + ProgramSetting.DirSep + "write-permissions." + Path.GetRandomFileName();
+				File.Create(TestPath).Close();
 				ToDelete.Add(TestPath);
 
 				if (Folder == Application.StartupPath)
 					continue;
-				foreach (string File in System.IO.Directory.GetFiles(Folder))
+				foreach (string file in Directory.GetFiles(Folder))
 				{
-					if ((System.IO.File.GetAttributes(File) & System.IO.FileAttributes.ReadOnly) == System.IO.FileAttributes.ReadOnly)
-						throw new System.IO.IOException(File);
+					if ((File.GetAttributes(file) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+						throw new IOException(file);
 				}
 			}
 
@@ -166,9 +167,9 @@ sealed class ConfigHandler
 			{
 				try
 				{
-					System.IO.File.Delete(TestFile);
+					File.Delete(TestFile);
 				}
-				catch (System.IO.IOException Ex)
+				catch (IOException Ex)
 				{
 					// Silently fail when the file can't be found or is being used by another process 
 				}
@@ -182,7 +183,7 @@ sealed class ConfigHandler
 		}
 
 		// When a user folder exists, and no config folder exists in the install dir, use the user's folder.
-		return ProgramPathExists | !System.IO.Directory.Exists(UserPath) ? Application.StartupPath + ProgramSetting.DirSep : UserPath;
+		return ProgramPathExists | !Directory.Exists(UserPath) ? Application.StartupPath + ProgramSetting.DirSep : UserPath;
 	}
 
 	public T GetProgramSetting<T>(string Key, T DefaultVal)
@@ -223,7 +224,7 @@ sealed class ConfigHandler
 		string ConfigString = null;
 		try
 		{
-			ConfigString = System.IO.File.ReadAllText(MainConfigFile);
+			ConfigString = File.ReadAllText(MainConfigFile);
 		}
 		catch (System.IO.IOException Ex)
 		{
@@ -257,7 +258,7 @@ sealed class ConfigHandler
 		try
 		{
 			System.IO.File.WriteAllText(MainConfigFile, ConfigStrB.ToString());
-			//IO.File.WriteAllText overwrites the file.
+			//File.WriteAllText overwrites the file.
 		}
 		catch
 		{
@@ -314,7 +315,7 @@ sealed class ConfigHandler
 
 	public void RegisterBoot()
 	{
-		if (Main.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoStartupRegistration, true))
+		if (Program.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoStartupRegistration, true))
 		{
 			if (Microsoft.Win32.Registry.GetValue(ProgramSetting.RegistryRootedBootKey, ProgramSetting.RegistryBootVal, null) == null)
 			{
@@ -367,12 +368,12 @@ struct CommandLine
 	public static void ReadArgs(List<string> ArgsList)
 	{
 #if DEBUG
-		Main.ProgramConfig.LogDebugEvent("Parsing command line settings");
+		Program.ProgramConfig.LogDebugEvent("Parsing command line settings");
 		foreach (string Param in ArgsList)
 		{
-			Main.ProgramConfig.LogDebugEvent("  Got: " + Param);
+			Program.ProgramConfig.LogDebugEvent("  Got: " + Param);
 		}
-		Main.ProgramConfig.LogDebugEvent("Done.");
+		Program.ProgramConfig.LogDebugEvent("Done.");
 #endif
 
 		if (ArgsList.Count > 1)

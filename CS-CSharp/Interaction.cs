@@ -59,12 +59,12 @@ namespace CreateSync
 		{
 			if (CommandLine.Silent)
 			{
-				Main.ProgramConfig.LogAppEvent(string.Format("Interaction: Silent: Balloon tip discarded: [{0}].", Msg));
+				Program.ProgramConfig.LogAppEvent(string.Format("Interaction: Silent: Balloon tip discarded: [{0}].", Msg));
 				return;
 			}
 			else
 			{
-				Main.ProgramConfig.LogAppEvent(string.Format("Interaction: Balloon tip shown: [{0}].", Msg));
+				Program.ProgramConfig.LogAppEvent(string.Format("Interaction: Balloon tip shown: [{0}].", Msg));
 			}
 
 			if (string.IsNullOrEmpty(Msg))
@@ -126,13 +126,13 @@ namespace CreateSync
 		{
 			if (CommandLine.Silent)
 			{
-				Main.ProgramConfig.LogAppEvent(string.Format("Interaction: Silent: Message Box discarded with default answer: [{0}] - [{1}].", Caption, Text));
+				Program.ProgramConfig.LogAppEvent(string.Format("Interaction: Silent: Message Box discarded with default answer: [{0}] - [{1}].", Caption, Text));
 				return DialogResult.OK;
 			}
 
 			DialogResult Result = MessageBox.Show(Text, Caption, Buttons, Icon);
 			if (CommandLine.Log)
-				Main.ProgramConfig.LogAppEvent(string.Format("Interaction: Message [{0}] - [{1}] received answer [{2}].", Caption, Text, Result.ToString()));
+				Program.ProgramConfig.LogAppEvent(string.Format("Interaction: Message [{0}] - [{1}] received answer [{2}].", Caption, Text, Result.ToString()));
 
 			return Result;
 		}

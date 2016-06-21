@@ -96,9 +96,9 @@ namespace CreateSync
 			switch (Type)
 			{
 				case TypeOfItem.File:
-					return Main.Translation.Translate("\\FILE");
+					return Program.Translation.Translate("\\FILE");
 				default:
-					return Main.Translation.Translate("\\FOLDER");
+					return Program.Translation.Translate("\\FOLDER");
 			}
 		}
 
@@ -107,11 +107,11 @@ namespace CreateSync
 			switch (Action)
 			{
 				case TypeOfAction.Copy:
-					return IsUpdate ? Main.Translation.Translate("\\UPDATE") : Main.Translation.Translate("\\CREATE");
+					return IsUpdate ? Program.Translation.Translate("\\UPDATE") : Program.Translation.Translate("\\CREATE");
 				case TypeOfAction.Delete:
-					return Main.Translation.Translate("\\DELETE");
+					return Program.Translation.Translate("\\DELETE");
 				default:
-					return Main.Translation.Translate("\\NONE");
+					return Program.Translation.Translate("\\NONE");
 			}
 		}
 
@@ -120,9 +120,9 @@ namespace CreateSync
 			switch (Side)
 			{
 				case SideOfSource.Left:
-					return Action == TypeOfAction.Copy ? Main.Translation.Translate("\\LR") : Main.Translation.Translate("\\LEFT");
+					return Action == TypeOfAction.Copy ? Program.Translation.Translate("\\LR") : Program.Translation.Translate("\\LEFT");
 				case SideOfSource.Right:
-					return Action == TypeOfAction.Copy ? Main.Translation.Translate("\\RL") : Main.Translation.Translate("\\RIGHT");
+					return Action == TypeOfAction.Copy ? Program.Translation.Translate("\\RL") : Program.Translation.Translate("\\RIGHT");
 				default:
 					return "";
 			}
@@ -224,7 +224,7 @@ namespace CreateSync
 
 		private static string SharpInclude(string FileName)
 		{
-			string Path = Main.ProgramConfig.ConfigRootDir + ProgramSetting.DirSep + FileName;
+			string Path = Program.ProgramConfig.ConfigRootDir + ProgramSetting.DirSep + FileName;
 			return System.IO.File.Exists(Path) ? System.IO.File.ReadAllText(Path) : FileName;
 		}
 
