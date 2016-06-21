@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
+using System.IO;
+using System.Diagnostics;
+using System.Collections;
 
 //TODO: Complete port
 
@@ -96,7 +100,7 @@ namespace CreateSync
 			Program.ProgramConfig.LogAppEvent(new string('=', 20));
 			Program.ProgramConfig.LogAppEvent("Program started: " + Application.StartupPath);
 			Program.ProgramConfig.LogAppEvent(string.Format("Profiles folder: {0}.", Program.ProgramConfig.ConfigRootDir));
-			Interaction.ShowDebug(Translation.Translate("\\DEBUG_WARNING"), Translation.Translate("\\DEBUG_MODE"));
+			Interaction.ShowDebug(Program.Translation.Translate("\\DEBUG_WARNING"), Program.Translation.Translate("\\DEBUG_MODE"));
 
 			//Read command line settings
 			CommandLine.ReadArgs(new List<string>(Environment.GetCommandLineArgs()));
@@ -104,7 +108,7 @@ namespace CreateSync
 			// Check if multiple instances are allowed.
 			if (CommandLine.RunAs == CommandLine.RunMode.Scheduler && SchedulerAlreadyRunning())
 			{
-				ProgramConfig.LogAppEvent("Scheduler already running; exiting.");
+				Program.ProgramConfig.LogAppEvent("Scheduler already running; exiting.");
 				ExitNeeded = true;
 				return;
 			}
@@ -115,10 +119,10 @@ namespace CreateSync
 
 			// Setup settings
 			ReloadProfiles();
-			ProgramConfig.LoadProgramSettings();
-			if (!ProgramConfig.ProgramSettingsSet(ProgramSetting.AutoUpdates) | !ProgramConfig.ProgramSettingsSet(ProgramSetting.Language))
+			Program.ProgramConfig.LoadProgramSettings();
+			if (!Program.ProgramConfig.ProgramSettingsSet(ProgramSetting.AutoUpdates) | !Program.ProgramConfig.ProgramSettingsSet(ProgramSetting.Language))
 			{
-				ProgramConfig.LogDebugEvent("Auto updates or language not set; launching first run dialog.");
+				Program.ProgramConfig.LogDebugEvent("Auto updates or language not set; launching first run dialog.");
 				HandleFirstRun();
 			}
 
@@ -126,17 +130,19 @@ namespace CreateSync
 			InitializeForms();
 
 			// Look for updates
-			if ((!CommandLine.NoUpdates) & ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoUpdates, false))
+			if ((!CommandLine.NoUpdates) & Program.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoUpdates, false))
 			{
-				Threading.Thread UpdateThread = new Threading.Thread(Updates.CheckForUpdates);
+				Thread UpdateThread = new Thread(() => Updates.CheckForUpdates());
 				UpdateThread.Start();
 			}
 
 			if (CommandLine.Help)
 			{
-				Interaction.ShowMsg(string.Format("Create Synchronicity, version {1}.{0}{0}Profiles folder: \"{2}\".{0}{0}Available commands: see manual.{0}{0}License information: See \"Release notes.txt\".{0}{0}Full manual: See {3}.{0}{0}You can support this software! See {4}.{0}{0}Happy syncing!", Environment.NewLine, Application.ProductVersion, ProgramConfig.ConfigRootDir, Branding.Help, Branding.Contribute), "Help!");
+				Interaction.ShowMsg(string.Format(
+					"Create Synchronicity, version {1}.{0}{0}Profiles folder: \"{2}\".{0}{0}Available commands: see manual.{0}{0}License information: See \"Release notes.txt\".{0}{0}Full manual: See {3}.{0}{0}You can support this software! See {4}.{0}{0}Happy syncing!",
+					Environment.NewLine, Application.ProductVersion, Program.ProgramConfig.ConfigRootDir, Branding.Help, Branding.Contribute), "Help!");
 #if DEBUG
-				Text.StringBuilder FreeSpace = new Text.StringBuilder();
+				System.Text.StringBuilder FreeSpace = new System.Text.StringBuilder();
 				foreach (DriveInfo Drive in DriveInfo.GetDrives())
 				{
 					if (Drive.IsReady)
@@ -144,12 +150,12 @@ namespace CreateSync
 						FreeSpace.AppendLine(string.Format("{0} -> {1:0,0} B free/{2:0,0} B", Drive.Name, Drive.TotalFreeSpace, Drive.TotalSize));
 					}
 				}
-				Interaction.ShowMsg(FreeSpace.ToString);
+				Interaction.ShowMsg(FreeSpace.ToString());
 #endif
 			}
 			else
 			{
-				ProgramConfig.LogDebugEvent(string.Format("Initialization complete. Running as '{0}'.", CommandLine.RunAs.ToString));
+				Program.ProgramConfig.LogDebugEvent(string.Format("Initialization complete. Running as '{0}'.", CommandLine.RunAs.ToString()));
 
 				if (CommandLine.RunAs == CommandLine.RunMode.Queue | CommandLine.RunAs == CommandLine.RunMode.Scheduler)
 				{
@@ -191,21 +197,21 @@ namespace CreateSync
 
 			// Save last window information. Don't overwrite config file if running in scheduler mode.
 			if (!(CommandLine.RunAs == CommandLine.RunMode.Scheduler))
-				ProgramConfig.SaveProgramSettings();
+				Program.ProgramConfig.SaveProgramSettings();
 
 			//Calling ReleaseMutex would be the same, since Blocker necessary holds the mutex at this point (otherwise the app would have closed already).
 			if (CommandLine.RunAs == CommandLine.RunMode.Scheduler)
 				Blocker.Close();
-			ProgramConfig.LogAppEvent("Program exited");
+			Program.ProgramConfig.LogAppEvent("Program exited");
 
-#if Debug And 0
+/*#if Debug && 0
 		SynchronizeForm.Check_NTFSToFATTime();
-#endif
+#endif*/
 		}
 
 		private void ReloadMainForm(object sender, FormClosedEventArgs e)
 		{
-			if (ReloadNeeded)
+			if (Program.ReloadNeeded)
 			{
 				MainFormInstance = new MainForm();
 				MainFormInstance.FormClosed += this.ReloadMainForm;
@@ -220,25 +226,25 @@ namespace CreateSync
 		public static void InitializeSharedObjects()
 		{
 			// Load program configuration
-			ProgramConfig = ConfigHandler.GetSingleton;
-			Translation = LanguageHandler.GetSingleton;
-			Profiles = new Dictionary<string, ProfileHandler>();
+			Program.ProgramConfig = ConfigHandler.GetSingleton();
+			Program.Translation = LanguageHandler.GetSingleton();
+			Program.Profiles = new Dictionary<string, ProfileHandler>();
 
 			try
 			{
-				SmallFont = new Drawing.Font("Verdana", 7f);
-				LargeFont = new Drawing.Font("Verdana", 8.25f);
+				Program.SmallFont = new Font("Verdana", 7f);
+				Program.LargeFont = new Font("Verdana", 8.25f);
 			}
 			catch (ArgumentException ex)
 			{
-				SmallFont = new Drawing.Font(Drawing.SystemFonts.MessageBoxFont.FontFamily.Name, 7f);
-				LargeFont = Drawing.SystemFonts.MessageBoxFont;
+				Program.SmallFont = new Font(SystemFonts.MessageBoxFont.FontFamily.Name, 7f);
+				Program.LargeFont = SystemFonts.MessageBoxFont;
 			}
 
 			// Create required folders
-			Directory.CreateDirectory(ProgramConfig.LogRootDir);
-			Directory.CreateDirectory(ProgramConfig.ConfigRootDir);
-			Directory.CreateDirectory(ProgramConfig.LanguageRootDir);
+			Directory.CreateDirectory(Program.ProgramConfig.LogRootDir);
+			Directory.CreateDirectory(Program.ProgramConfig.ConfigRootDir);
+			Directory.CreateDirectory(Program.ProgramConfig.LanguageRootDir);
 		}
 
 		public static void InitializeForms()
@@ -254,31 +260,32 @@ namespace CreateSync
 
 		public static void HandleFirstRun()
 		{
-			if (!ProgramConfig.ProgramSettingsSet(ProgramSetting.Language))
+			if (!Program.ProgramConfig.ProgramSettingsSet(ProgramSetting.Language))
 			{
 				LanguageForm Lng = new LanguageForm();
 				Lng.ShowDialog();
-				Translation = LanguageHandler.GetSingleton(true);
+				Program.Translation = LanguageHandler.GetSingleton(true);
 			}
 
-			if (!ProgramConfig.ProgramSettingsSet(ProgramSetting.AutoUpdates))
+			if (!Program.ProgramConfig.ProgramSettingsSet(ProgramSetting.AutoUpdates))
 			{
-				bool AutoUpdates = Interaction.ShowMsg(Translation.Translate("\\WELCOME_MSG"), Translation.Translate("\\FIRST_RUN"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? true : false;
-				ProgramConfig.SetProgramSetting<bool>(ProgramSetting.AutoUpdates, AutoUpdates);
+				bool AutoUpdates = Interaction.ShowMsg(Program.Translation.Translate("\\WELCOME_MSG"),
+					Program.Translation.Translate("\\FIRST_RUN"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? true : false;
+				Program.ProgramConfig.SetProgramSetting<bool>(ProgramSetting.AutoUpdates, AutoUpdates);
 			}
 
-			ProgramConfig.SaveProgramSettings();
+			Program.ProgramConfig.SaveProgramSettings();
 		}
 
 		public static void ReloadProfiles()
 		{
-			Profiles.Clear();
+			Program.Profiles.Clear();
 			//Initialized in InitializeSharedObjects
 
-			foreach (string ConfigFile in Directory.GetFiles(ProgramConfig.ConfigRootDir, "*.sync"))
+			foreach (string ConfigFile in Directory.GetFiles(Program.ProgramConfig.ConfigRootDir, "*.sync"))
 			{
 				string Name = Path.GetFileNameWithoutExtension(ConfigFile);
-				Profiles.Add(Name, new ProfileHandler(Name));
+				Program.Profiles.Add(Name, new ProfileHandler(Name));
 			}
 		}
 		#endregion
@@ -290,20 +297,20 @@ namespace CreateSync
 			if (MutexName.Length > 260)
 				MutexName = MutexName.Substring(0, 260);
 
-			ProgramConfig.LogDebugEvent(string.Format("Registering mutex: \"{0}\"", MutexName));
+			Program.ProgramConfig.LogDebugEvent(string.Format("Registering mutex: \"{0}\"", MutexName));
 
 			try
 			{
-				Blocker = new Threading.Mutex(false, MutexName);
+				Blocker = new Mutex(false, MutexName);
 			}
-			catch (Threading.AbandonedMutexException Ex)
+			catch (AbandonedMutexException Ex)
 			{
-				ProgramConfig.LogDebugEvent("Abandoned mutex detected");
+				Program.ProgramConfig.LogDebugEvent("Abandoned mutex detected");
 				return false;
 			}
-			catch (System.UnauthorizedAccessException Ex)
+			catch (UnauthorizedAccessException Ex)
 			{
-				ProgramConfig.LogDebugEvent("Acess to the Mutex forbidden");
+				Program.ProgramConfig.LogDebugEvent("Acess to the Mutex forbidden");
 				return true;
 			}
 
@@ -313,121 +320,102 @@ namespace CreateSync
 		public static void RedoSchedulerRegistration()
 		{
 			bool NeedToRunAtBootTime = false;
-			foreach (ProfileHandler Profile in Profiles.Values)
+			foreach (ProfileHandler Profile in Program.Profiles.Values)
 			{
 				NeedToRunAtBootTime = NeedToRunAtBootTime | (Profile.Scheduler.Frequency != ScheduleInfo.Freq.Never);
 				if (Profile.Scheduler.Frequency != ScheduleInfo.Freq.Never)
-					ProgramConfig.LogAppEvent(string.Format("Profile {0} requires the scheduler to run.", Profile.ProfileName));
+					Program.ProgramConfig.LogAppEvent(string.Format("Profile {0} requires the scheduler to run.", Profile.ProfileName));
 			}
 
 			try
 			{
-				if (NeedToRunAtBootTime && ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoStartupRegistration, true))
+				if (NeedToRunAtBootTime && Program.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.AutoStartupRegistration, true))
 				{
-					ProgramConfig.RegisterBoot();
+					Program.ProgramConfig.RegisterBoot();
 					if (CommandLine.RunAs == CommandLine.RunMode.Normal)
 					{
-						ProgramConfig.LogAppEvent("Starting scheduler");
-						Diagnostics.Process.Start(Application.ExecutablePath, "/scheduler /noupdates" + CommandLine.Log ? " /log" : "");
+						Program.ProgramConfig.LogAppEvent("Starting scheduler");
+						Process.Start(Application.ExecutablePath, "/scheduler /noupdates" + (CommandLine.Log ? " /log" : ""));
 					}
 				}
 				else
 				{
 					if (Microsoft.Win32.Registry.GetValue(ProgramSetting.RegistryRootedBootKey, ProgramSetting.RegistryBootVal, null) != null)
 					{
-						ProgramConfig.LogAppEvent("Unregistering program from startup list");
+						Program.ProgramConfig.LogAppEvent("Unregistering program from startup list");
 						Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ProgramSetting.RegistryBootKey, true).DeleteValue(ProgramSetting.RegistryBootVal);
 					}
 				}
 			}
 			catch (Exception Ex)
 			{
-				Interaction.ShowMsg(Translation.Translate("\\UNREG_ERROR"), Translation.Translate("\\ERROR"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Interaction.ShowMsg(Program.Translation.Translate("\\UNREG_ERROR"), Program.Translation.Translate("\\ERROR"),
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
-		private void StartQueue(System.Object sender, System.EventArgs e)
+		private void StartQueue(object sender, EventArgs e)
 		{
-			MainFormInstance.ApplicationTimer.Interval = ProgramConfig.GetProgramSetting<int>(ProgramSetting.Pause, 5000);
+			MainFormInstance.ApplicationTimer.Interval = Program.ProgramConfig.GetProgramSetting<int>(ProgramSetting.Pause, 5000);
 			//Wait 5s between profiles k and k+1, k > 0
 			MainFormInstance.ApplicationTimer.Stop();
 			ProcessProfilesQueue();
 		}
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_ProcessProfilesQueue_ProfilesQueue_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
-
-		Queue<string> static_ProcessProfilesQueue_ProfilesQueue;
+		
 		private void ProcessProfilesQueue()
 		{
-			lock (static_ProcessProfilesQueue_ProfilesQueue_Init)
+			Queue<string> ProfilesQueue = new Queue<string>();
+
+			Program.ProgramConfig.LogAppEvent("Profiles queue: Queue created.");
+			List<string> RequestedProfiles = new List<string>();
+
+			if ((CommandLine.RunAll))
 			{
-				try
-				{
-					if (InitStaticVariableHelper(static_ProcessProfilesQueue_ProfilesQueue_Init))
-					{
-						static_ProcessProfilesQueue_ProfilesQueue = null;
-					}
-				}
-				finally
-				{
-					static_ProcessProfilesQueue_ProfilesQueue_Init.State = 1;
-				}
+				RequestedProfiles.AddRange(Program.Profiles.Keys);
+				//Overwrites previous initialization
 			}
-
-			if (static_ProcessProfilesQueue_ProfilesQueue == null)
+			else
 			{
-				static_ProcessProfilesQueue_ProfilesQueue = new Queue<string>();
-
-				ProgramConfig.LogAppEvent("Profiles queue: Queue created.");
-				List<string> RequestedProfiles = new List<string>();
-
-				if ((CommandLine.RunAll))
+				List<string> RequestedGroups = new List<string>();
+				foreach (string Entry in CommandLine.TasksToRun.Split(ProgramSetting.EnqueuingSeparator))
 				{
-					RequestedProfiles.AddRange(Profiles.Keys);
-					//Overwrites previous initialization
-				}
-				else
-				{
-					List<string> RequestedGroups = new List<string>();
-					foreach (string Entry in CommandLine.TasksToRun.Split(ProgramSetting.EnqueuingSeparator))
+					if (Entry.StartsWith(ProgramSetting.GroupPrefix.ToString()))
 					{
-						if (Entry.StartsWith(ProgramSetting.GroupPrefix))
-						{
-							RequestedGroups.Add(Entry.Substring(1));
-						}
-						else
-						{
-							RequestedProfiles.Add(Entry);
-						}
-					}
-
-					foreach (ProfileHandler Profile in Profiles.Values)
-					{
-						if (RequestedGroups.Contains(Profile.GetSetting<string>(ProfileSetting.Group, "")))
-							RequestedProfiles.Add(Profile.ProfileName);
-					}
-				}
-
-				foreach (string Profile in RequestedProfiles)
-				{
-					if (Profiles.ContainsKey(Profile))
-					{
-						//Displays a message if there is a problem.
-						if (Profiles(Profile).ValidateConfigFile())
-						{
-							ProgramConfig.LogAppEvent("Profiles queue: Registered profile " + Profile);
-							static_ProcessProfilesQueue_ProfilesQueue.Enqueue(Profile);
-						}
+						RequestedGroups.Add(Entry.Substring(1));
 					}
 					else
 					{
-						Interaction.ShowMsg(Translation.TranslateFormat("\\INVALID_PROFILE", Profile), Profile, , MessageBoxIcon.Error);
+						RequestedProfiles.Add(Entry);
 					}
+				}
+
+				foreach (ProfileHandler Profile in Program.Profiles.Values)
+				{
+					if (RequestedGroups.Contains(Profile.GetSetting<string>(ProfileSetting.Group, "")))
+						RequestedProfiles.Add(Profile.ProfileName);
 				}
 			}
 
-			if (static_ProcessProfilesQueue_ProfilesQueue.Count == 0)
+			foreach (string Profile in RequestedProfiles)
 			{
-				ProgramConfig.LogAppEvent("Profiles queue: Synced all profiles.");
+				if (Program.Profiles.ContainsKey(Profile))
+				{
+					//Displays a message if there is a problem.
+					if (Program.Profiles[Profile].ValidateConfigFile())
+					{
+						Program.ProgramConfig.LogAppEvent("Profiles queue: Registered profile " + Profile);
+						ProfilesQueue.Enqueue(Profile);
+					}
+				}
+				else
+				{
+					Interaction.ShowMsg(Program.Translation.TranslateFormat("\\INVALID_PROFILE", Profile), Profile, null, MessageBoxIcon.Error);
+				}
+			}
+
+			if (ProfilesQueue.Count == 0)
+			{
+				Program.ProgramConfig.LogAppEvent("Profiles queue: Synced all profiles.");
 				Application.Exit();
 			}
 			else
@@ -443,13 +431,13 @@ namespace CreateSync
 		{
 			if (Completed)
 			{
-				ProgramConfig.LogAppEvent("Scheduler: " + ProfileName + " completed successfully.");
-				if (Profiles.ContainsKey(ProfileName))
-					ScheduledProfiles.Add(new SchedulerEntry(ProfileName, Profiles(ProfileName).Scheduler.NextRun(), false, false));
+				Program.ProgramConfig.LogAppEvent("Scheduler: " + ProfileName + " completed successfully.");
+				if (Program.Profiles.ContainsKey(ProfileName))
+					ScheduledProfiles.Add(new SchedulerEntry(ProfileName, Program.Profiles[ProfileName].Scheduler.NextRun(), false, false));
 			}
 			else
 			{
-				ProgramConfig.LogAppEvent("Scheduler: " + ProfileName + " reported an error, and will run again in 4 hours.");
+				Program.ProgramConfig.LogAppEvent("Scheduler: " + ProfileName + " reported an error, and will run again in 4 hours.");
 				// If ProfileName has been removed, ReloadScheduledProfiles will unschedule it.
 				ScheduledProfiles.Add(new SchedulerEntry(ProfileName, System.DateTime.Now.AddHours(4), true, true));
 			}
@@ -457,26 +445,26 @@ namespace CreateSync
 
 		private void Scheduling_Tick(System.Object sender, System.EventArgs e)
 		{
-			if (ProgramConfig.CanGoOn == false)
+			if (Program.ProgramConfig.CanGoOn == false)
 				return;
 			//Don't start next sync yet.
 
 			ReloadScheduledProfiles();
 			if (ScheduledProfiles.Count == 0)
 			{
-				ProgramConfig.LogAppEvent("Scheduler: No profiles left to run, exiting.");
+				Program.ProgramConfig.LogAppEvent("Scheduler: No profiles left to run, exiting.");
 				Application.Exit();
 				return;
 			}
 			else
 			{
-				SchedulerEntry NextInQueue = ScheduledProfiles(0);
-				string Status = Translation.TranslateFormat("\\SCH_WAITING", NextInQueue.Name, NextInQueue.NextRun == ScheduleInfo.DATE_CATCHUP ? "..." : NextInQueue.NextRun.ToString);
+				SchedulerEntry NextInQueue = ScheduledProfiles[0];
+				string Status = Program.Translation.TranslateFormat("\\SCH_WAITING", NextInQueue.Name, NextInQueue.NextRun == ScheduleInfo.DATE_CATCHUP ? "..." : NextInQueue.NextRun.ToString());
 				Interaction.StatusIcon.Text = Status.Length >= 64 ? Status.Substring(0, 63) : Status;
 
-				if (System.DateTime.Compare(NextInQueue.NextRun, System.DateTime.Now) <= 0)
+				if (DateTime.Compare(NextInQueue.NextRun, DateTime.Now) <= 0)
 				{
-					ProgramConfig.LogAppEvent("Scheduler: Launching " + NextInQueue.Name);
+					Program.ProgramConfig.LogAppEvent("Scheduler: Launching " + NextInQueue.Name);
 
 					SynchronizeForm SyncForm = new SynchronizeForm(NextInQueue.Name, false, NextInQueue.CatchUp);
 					SyncForm.SyncFinished += ScheduledProfileCompleted;
@@ -491,8 +479,7 @@ namespace CreateSync
 		{
 			return (Item.Name == Needle);
 		}
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_ReloadScheduledProfiles_OneDay_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
-
+		
 		//Logic of this function:
 		// A new entry is created. The need for catching up is calculated regardless of the current state of the list.
 		// Then, a corresponding entry (same name) is searched for. If not found, then the new entry is simply added to the list.
@@ -503,38 +490,23 @@ namespace CreateSync
 		//             (that's to avoid infinite loops when eg. the backup medium is unplugged)
 		//Needed! This allows to detect config changes.
 
-		TimeSpan static_ReloadScheduledProfiles_OneDay;
 		private void ReloadScheduledProfiles()
 		{
 			ReloadProfiles();
-			foreach (KeyValuePair<string, ProfileHandler> Profile in Profiles)
+			foreach (KeyValuePair<string, ProfileHandler> Profile in Program.Profiles)
 			{
 				string Name = Profile.Key;
 				ProfileHandler Handler = Profile.Value;
-				lock (static_ReloadScheduledProfiles_OneDay_Init)
-				{
-					try
-					{
-						if (InitStaticVariableHelper(static_ReloadScheduledProfiles_OneDay_Init))
-						{
-							static_ReloadScheduledProfiles_OneDay = new TimeSpan(1, 0, 0, 0);
-						}
-					}
-					finally
-					{
-						static_ReloadScheduledProfiles_OneDay_Init.State = 1;
-					}
-				}
 
 				if (Handler.Scheduler.Frequency != ScheduleInfo.Freq.Never)
 				{
 					SchedulerEntry NewEntry = new SchedulerEntry(Name, Handler.Scheduler.NextRun(), false, false);
 
 					//<catchup>
-					System.DateTime LastRun = Handler.GetLastRun();
-					if (Handler.GetSetting<bool>(ProfileSetting.CatchUpSync, false) & LastRun != ScheduleInfo.DATE_NEVER & (NewEntry.NextRun - LastRun) > (Handler.Scheduler.GetInterval() + static_ReloadScheduledProfiles_OneDay))
+					DateTime LastRun = Handler.GetLastRun();
+					if (Handler.GetSetting<bool>(ProfileSetting.CatchUpSync, false) & LastRun != ScheduleInfo.DATE_NEVER & (NewEntry.NextRun - LastRun) > (Handler.Scheduler.GetInterval() + TimeSpan.FromDays(1)))
 					{
-						ProgramConfig.LogAppEvent("Scheduler: Profile " + Name + " was last executed on " + LastRun.ToString + ", marked for catching up.");
+						Program.ProgramConfig.LogAppEvent("Scheduler: Profile " + Name + " was last executed on " + LastRun.ToString() + ", marked for catching up.");
 						NewEntry.NextRun = ScheduleInfo.DATE_CATCHUP;
 						NewEntry.CatchUp = true;
 					}
@@ -544,10 +516,10 @@ namespace CreateSync
 					int ProfileIndex = ScheduledProfiles.FindIndex(new Predicate<SchedulerEntry>(EqualityPredicate));
 					if (ProfileIndex != -1)
 					{
-						SchedulerEntry CurEntry = ScheduledProfiles(ProfileIndex);
+						SchedulerEntry CurEntry = ScheduledProfiles[ProfileIndex];
 
 						//Don't postpone queued late backups
-						if (NewEntry.NextRun != CurEntry.NextRun & CurEntry.NextRun >= System.DateTime.Now())
+						if (NewEntry.NextRun != CurEntry.NextRun & CurEntry.NextRun >= DateTime.Now)
 						{
 							NewEntry.HasFailed = CurEntry.HasFailed;
 							if (CurEntry.HasFailed)
@@ -555,13 +527,13 @@ namespace CreateSync
 
 							ScheduledProfiles.RemoveAt(ProfileIndex);
 							ScheduledProfiles.Add(NewEntry);
-							ProgramConfig.LogAppEvent("Scheduler: Re-registered profile for delayed run on " + NewEntry.NextRun.ToString + ": " + Name);
+							Program.ProgramConfig.LogAppEvent("Scheduler: Re-registered profile for delayed run on " + NewEntry.NextRun.ToString() + ": " + Name);
 						}
 					}
 					else
 					{
 						ScheduledProfiles.Add(NewEntry);
-						ProgramConfig.LogAppEvent("Scheduler: Registered profile for delayed run on " + NewEntry.NextRun.ToString + ": " + Name);
+						Program.ProgramConfig.LogAppEvent("Scheduler: Registered profile for delayed run on " + NewEntry.NextRun.ToString() + ": " + Name);
 					}
 				}
 			}
@@ -569,7 +541,7 @@ namespace CreateSync
 			//Remove deleted or disabled profiles
 			for (int ProfileIndex = ScheduledProfiles.Count - 1; ProfileIndex >= 0; ProfileIndex += -1)
 			{
-				if (!Profiles.ContainsKey(ScheduledProfiles(ProfileIndex).Name) || Profiles(ScheduledProfiles(ProfileIndex).Name).Scheduler.Frequency == ScheduleInfo.Freq.Never)
+				if (!Program.Profiles.ContainsKey(ScheduledProfiles[ProfileIndex].Name) || Program.Profiles[ScheduledProfiles[ProfileIndex].Name].Scheduler.Frequency == ScheduleInfo.Freq.Never)
 				{
 					ScheduledProfiles.RemoveAt(ProfileIndex);
 				}
@@ -581,25 +553,25 @@ namespace CreateSync
 		#endregion
 
 #if DEBUG
-		public static void Explore(string Path)
+		public static void Explore(string path)
 		{
-			Path = Path.GetFullPath(Path);
-			using (StreamWriter Writer = new StreamWriter(Path.Combine(ProgramConfig.LogRootDir, "scan-results.txt"), true))
+			path = Path.GetFullPath(path);
+			using (StreamWriter Writer = new StreamWriter(Path.Combine(Program.ProgramConfig.LogRootDir, "scan-results.txt"), true))
 			{
-				Writer.WriteLine("== Exploring " + Path);
+				Writer.WriteLine("== Exploring " + path);
 
 				Writer.WriteLine("** Not requesting any specific permissions");
-				ExploreTree(Path, 1, Writer);
+				ExploreTree(path, 1, Writer);
 
 				try
 				{
 					Writer.WriteLine("** Requesting full permissions");
-					Security.Permissions.FileIOPermission Permissions = new Security.Permissions.FileIOPermission(Security.Permissions.PermissionState.Unrestricted);
-					Permissions.AllFiles = Security.Permissions.FileIOPermissionAccess.AllAccess;
+					System.Security.Permissions.FileIOPermission Permissions = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.PermissionState.Unrestricted);
+					Permissions.AllFiles = System.Security.Permissions.FileIOPermissionAccess.AllAccess;
 					Permissions.Demand();
-					ExploreTree(Path, 1, Writer);
+					ExploreTree(path, 1, Writer);
 				}
-				catch (Security.SecurityException Ex)
+				catch (System.Security.SecurityException Ex)
 				{
 					Writer.WriteLine(Ex.Message);
 				}
@@ -610,21 +582,21 @@ namespace CreateSync
 		{
 			string Indentation = "".PadLeft(Depth * 2);
 
-			foreach (string File in Directory.GetFiles(Path))
+			foreach (string file in Directory.GetFiles(Path))
 			{
 				try
 				{
 					Stream.Write(Indentation);
-					Stream.Write(File);
-					Stream.Write("\t" + File.Exists(File));
-					Stream.Write("\t" + File.GetAttributes(File).ToString());
-					Stream.Write("\t" + Interaction.FormatDate(File.GetCreationTimeUtc(File)));
-					Stream.Write("\t" + Interaction.FormatDate(File.GetLastWriteTimeUtc(File)));
+					Stream.Write(file);
+					Stream.Write("\t" + File.Exists(file));
+					Stream.Write("\t" + File.GetAttributes(file).ToString());
+					Stream.Write("\t" + Interaction.FormatDate(File.GetCreationTimeUtc(file)));
+					Stream.Write("\t" + Interaction.FormatDate(File.GetLastWriteTimeUtc(file)));
 					Stream.WriteLine();
 				}
 				catch (Exception ex)
 				{
-					Stream.WriteLine(Indentation + ex.ToString);
+					Stream.WriteLine(Indentation + ex.ToString());
 				}
 			}
 
@@ -642,14 +614,14 @@ namespace CreateSync
 				}
 				catch (Exception ex)
 				{
-					Stream.WriteLine(Indentation + ex.ToString);
+					Stream.WriteLine(Indentation + ex.ToString());
 				}
 				ExploreTree(Folder, Depth + 1, Stream);
 			}
 		}
 #endif
 
-#if Debug And 0
+/*#if Debug And 0
 	public void VariousTests()
 	{
 		MessageBox.Show(string.IsNullOrEmpty(null));
@@ -682,6 +654,6 @@ namespace CreateSync
 			return false;
 		}
 	}
-#endif
+#endif*/
 	}
 }

@@ -122,7 +122,7 @@ namespace CreateSync
 #endif
 		}
 
-		public static DialogResult ShowMsg(string Text, string Caption = "", MessageBoxButtons Buttons = MessageBoxButtons.OK, MessageBoxIcon Icon = MessageBoxIcon.None)
+		public static DialogResult ShowMsg(string Text, string Caption = "", MessageBoxButtons? Buttons = MessageBoxButtons.OK, MessageBoxIcon Icon = MessageBoxIcon.None)
 		{
 			if (CommandLine.Silent)
 			{

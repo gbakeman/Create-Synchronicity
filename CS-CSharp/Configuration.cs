@@ -36,12 +36,14 @@ static internal class ProgramSetting
 	//Used to parse excluded file types. For example, `folder"Documents"` means that folders named documents should be excluded.
 	public const string ExcludedFolderPrefix = "folder";
 	public const char GroupPrefix = ':';
-/*#if CONFIG = "Linux"
 	public const char EnqueuingSeparator = '|';
-#elif
-	public const char DirSep = '/';
-#endif*/
-	public const char DirSep = '\\';
+
+#if Linux
+		public const char DirSep = '/';
+#else
+		public const char DirSep = '\\';
+#endif
+
 
 #if DEBUG
 	public const bool Debug = true;
