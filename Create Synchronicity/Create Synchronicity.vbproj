@@ -135,50 +135,37 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Branding.vb" />
+    <Compile Include="Compression interface.vb" />
+    <Compile Include="Interaction.vb" />
     <Compile Include="Interface\AboutForm.designer.vb">
       <DependentUpon>AboutForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Interface\AboutForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Compression interface.vb" />
-    <Compile Include="Interaction.vb" />
-    <Compile Include="Internationalization.vb" />
-    <Compile Include="IO interface.vb" />
     <Compile Include="Interface\LanguageForm.Designer.vb">
       <DependentUpon>LanguageForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Interface\LanguageForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Logs.vb" />
-    <Compile Include="Main.vb" />
     <Compile Include="Interface\MainForm.Designer.vb">
       <DependentUpon>MainForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Interface\MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Profile settings.vb" />
-    <Compile Include="Program settings.vb" />
-    <Compile Include="Revision.vb" />
     <Compile Include="Interface\SchedulingForm.Designer.vb">
       <DependentUpon>SchedulingForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Interface\SchedulingForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Interface\SettingsForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Interface\SettingsForm.Designer.vb">
       <DependentUpon>SettingsForm.vb</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="My Project\Application.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Application.myapp</DependentUpon>
+    <Compile Include="Interface\SettingsForm.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Interface\SynchronizeForm.Designer.vb">
       <DependentUpon>SynchronizeForm.vb</DependentUpon>
@@ -186,34 +173,21 @@
     <Compile Include="Interface\SynchronizeForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Internationalization.vb" />
+    <Compile Include="IO interface.vb" />
+    <Compile Include="Logs.vb" />
+    <Compile Include="Main.vb" />
+    <Compile Include="Profile settings.vb" />
+    <Compile Include="Program settings.vb" />
+    <Compile Include="Revision.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
     <Compile Include="Syncing structures.vb" />
     <Compile Include="Updates.vb" />
     <Compile Include="Utilities.vb" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Interface\AboutForm.resx">
-      <DependentUpon>AboutForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Interface\LanguageForm.resx">
-      <DependentUpon>LanguageForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Interface\MainForm.resx">
-      <DependentUpon>MainForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Interface\SchedulingForm.resx">
-      <DependentUpon>SchedulingForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Interface\SettingsForm.resx">
-      <DependentUpon>SettingsForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Interface\SynchronizeForm.resx">
-      <DependentUpon>SynchronizeForm.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="create-synchronicity.snk" />
@@ -346,6 +320,29 @@
     <Content Include="languages\local-names.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Interface\AboutForm.resx">
+      <DependentUpon>AboutForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\LanguageForm.resx">
+      <DependentUpon>LanguageForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\MainForm.resx">
+      <DependentUpon>MainForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\SchedulingForm.resx">
+      <DependentUpon>SchedulingForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\SettingsForm.resx">
+      <DependentUpon>SettingsForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\SynchronizeForm.resx">
+      <DependentUpon>SynchronizeForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\" />

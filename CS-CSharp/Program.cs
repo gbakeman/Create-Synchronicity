@@ -32,7 +32,7 @@ namespace CreateSync
 		static internal Dictionary<string, ProfileHandler> Profiles;
 		static internal bool ReloadNeeded;
 
-		static internal MainForm MainFormInstance;
+		static internal Forms.MainForm MainFormInstance;
 		static internal Font SmallFont;
 
 		static internal Font LargeFont;
@@ -163,15 +163,15 @@ namespace CreateSync
 
 					if (CommandLine.RunAs == CommandLine.RunMode.Queue)
 					{
-						MainFormInstance.ApplicationTimer.Interval = 1000;
-						MainFormInstance.ApplicationTimer.Tick += StartQueue;
+						Program.MainFormInstance.ApplicationTimer.Interval = 1000;
+						Program.MainFormInstance.ApplicationTimer.Tick += StartQueue;
 					}
 					else if (CommandLine.RunAs == CommandLine.RunMode.Scheduler)
 					{
-						MainFormInstance.ApplicationTimer.Interval = 15000;
-						MainFormInstance.ApplicationTimer.Tick += Scheduling_Tick;
+						Program.MainFormInstance.ApplicationTimer.Interval = 15000;
+						Program.MainFormInstance.ApplicationTimer.Tick += Scheduling_Tick;
 					}
-					MainFormInstance.ApplicationTimer.Start();
+					Program.MainFormInstance.ApplicationTimer.Start();
 					//First tick fires after ApplicationTimer.Interval milliseconds.
 #if DEBUG
 				}
@@ -184,8 +184,8 @@ namespace CreateSync
 				}
 				else
 				{
-					MainFormInstance.FormClosed += ReloadMainForm;
-					MainFormInstance.Show();
+					Program.MainFormInstance.FormClosed += ReloadMainForm;
+					Program.MainFormInstance.Show();
 				}
 			}
 		}
@@ -213,9 +213,9 @@ namespace CreateSync
 		{
 			if (Program.ReloadNeeded)
 			{
-				MainFormInstance = new MainForm();
-				MainFormInstance.FormClosed += this.ReloadMainForm;
-				MainFormInstance.Show();
+				Program.MainFormInstance = new Forms.MainForm();
+				Program.MainFormInstance.FormClosed += this.ReloadMainForm;
+				Program.MainFormInstance.Show();
 			}
 			else
 			{
@@ -250,19 +250,19 @@ namespace CreateSync
 		public static void InitializeForms()
 		{
 			// Create MainForm
-			MainFormInstance = new MainForm();
+			Program.MainFormInstance = new Forms.MainForm();
 
 			//Load status icon
 			Interaction.LoadStatusIcon();
-			MainFormInstance.ToolStripHeader.Image = Interaction.StatusIcon.Icon.ToBitmap;
-			Interaction.StatusIcon.ContextMenuStrip = MainFormInstance.StatusIconMenu;
+			Program.MainFormInstance.ToolStripHeader.Image = Interaction.StatusIcon.Icon.ToBitmap();
+			Interaction.StatusIcon.ContextMenuStrip = Program.MainFormInstance.StatusIconMenu;
 		}
 
 		public static void HandleFirstRun()
 		{
 			if (!Program.ProgramConfig.ProgramSettingsSet(ProgramSetting.Language))
 			{
-				LanguageForm Lng = new LanguageForm();
+				Forms.LanguageForm Lng = new Forms.LanguageForm();
 				Lng.ShowDialog();
 				Program.Translation = LanguageHandler.GetSingleton(true);
 			}
@@ -356,9 +356,9 @@ namespace CreateSync
 
 		private void StartQueue(object sender, EventArgs e)
 		{
-			MainFormInstance.ApplicationTimer.Interval = Program.ProgramConfig.GetProgramSetting<int>(ProgramSetting.Pause, 5000);
+			Program.MainFormInstance.ApplicationTimer.Interval = Program.ProgramConfig.GetProgramSetting<int>(ProgramSetting.Pause, 5000);
 			//Wait 5s between profiles k and k+1, k > 0
-			MainFormInstance.ApplicationTimer.Stop();
+			Program.MainFormInstance.ApplicationTimer.Stop();
 			ProcessProfilesQueue();
 		}
 		
@@ -420,7 +420,7 @@ namespace CreateSync
 			}
 			else
 			{
-				SynchronizeForm SyncForm = new SynchronizeForm(static_ProcessProfilesQueue_ProfilesQueue.Dequeue(), CommandLine.ShowPreview, false);
+				Forms.SynchronizeForm SyncForm = new Forms.SynchronizeForm(ProfilesQueue.Dequeue(), CommandLine.ShowPreview, false);
 				SyncForm.SyncFinished += (string Name, bool Completed) => MainFormInstance.ApplicationTimer.Start();
 				//Wait for 5 seconds before moving on.
 				SyncForm.StartSynchronization(false);
