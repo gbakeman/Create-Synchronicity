@@ -421,7 +421,7 @@ namespace CreateSync
 			else
 			{
 				Forms.SynchronizeForm SyncForm = new Forms.SynchronizeForm(ProfilesQueue.Dequeue(), CommandLine.ShowPreview, false);
-				SyncForm.SyncFinished += (string Name, bool Completed) => MainFormInstance.ApplicationTimer.Start();
+				SyncForm.SyncFinished += (string Name, bool Completed) => Program.MainFormInstance.ApplicationTimer.Start();
 				//Wait for 5 seconds before moving on.
 				SyncForm.StartSynchronization(false);
 			}
@@ -443,7 +443,7 @@ namespace CreateSync
 			}
 		}
 
-		private void Scheduling_Tick(System.Object sender, System.EventArgs e)
+		private void Scheduling_Tick(object sender, System.EventArgs e)
 		{
 			if (Program.ProgramConfig.CanGoOn == false)
 				return;
@@ -466,7 +466,7 @@ namespace CreateSync
 				{
 					Program.ProgramConfig.LogAppEvent("Scheduler: Launching " + NextInQueue.Name);
 
-					SynchronizeForm SyncForm = new SynchronizeForm(NextInQueue.Name, false, NextInQueue.CatchUp);
+					Forms.SynchronizeForm SyncForm = new Forms.SynchronizeForm(NextInQueue.Name, false, NextInQueue.CatchUp);
 					SyncForm.SyncFinished += ScheduledProfileCompleted;
 					ScheduledProfiles.RemoveAt(0);
 					SyncForm.StartSynchronization(false);

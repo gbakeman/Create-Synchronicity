@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CreateSync.Forms
@@ -15,7 +16,7 @@ namespace CreateSync.Forms
 		private LogHandler Log;
 
 		private ProfileHandler Handler;
-		private Dictionary<string, bool> ValidFiles = new Dictionary<string, bool>();
+		private Dictionary<string, bool?> ValidFiles = new Dictionary<string, bool?>();
 		private List<SyncingItem> SyncingList = new List<SyncingItem>();
 		private List<FileNamePattern> IncludedPatterns = new List<FileNamePattern>();
 		private List<FileNamePattern> ExcludedPatterns = new List<FileNamePattern>();
@@ -45,7 +46,7 @@ namespace CreateSync.Forms
 		private string RightRootPath;
 
 		private delegate void StepCompletedCall(StatusData.SyncStep Id);
-		private delegate void SetIntCall(StatusData.SyncStep Id, int Max);
+		private delegate void SetIntCall(StatusData.SyncStep Id, int Max, bool Finished);
 
 		internal event SyncFinishedEventHandler SyncFinished;
 		internal delegate void SyncFinishedEventHandler(string Name, bool Completed);
@@ -193,7 +194,7 @@ namespace CreateSync.Forms
 
 					try
 					{
-						if (!string.IsNullOrEmpty(DiffProgram) && IO.File.Exists(OldFile) && IO.File.Exists(NewFile))
+						if (!string.IsNullOrEmpty(DiffProgram) && File.Exists(OldFile) && File.Exists(NewFile))
 							Interaction.StartProcess(DiffProgram, "\"" + OldFile + "\" \"" + NewFile + "\"");
 					}
 					catch (Exception Ex)
@@ -255,30 +256,30 @@ namespace CreateSync.Forms
 		{
 			UpdateStatuses();
 		}
-		
-/*#if 0
-	//Works, but not really efficiently, and flickers a lot.
-	int static_PreviewList_CacheVirtualItems_PrevStartIndex;
-	private void PreviewList_CacheVirtualItems(object sender, System.Windows.Forms.CacheVirtualItemsEventArgs e)
-	{
-		lock (static_PreviewList_CacheVirtualItems_PrevStartIndex_Init) {
-			try {
-				if (InitStaticVariableHelper(static_PreviewList_CacheVirtualItems_PrevStartIndex_Init)) {
-					static_PreviewList_CacheVirtualItems_PrevStartIndex = -1;
+
+		/*#if 0
+			//Works, but not really efficiently, and flickers a lot.
+			int static_PreviewList_CacheVirtualItems_PrevStartIndex;
+			private void PreviewList_CacheVirtualItems(object sender, System.Windows.Forms.CacheVirtualItemsEventArgs e)
+			{
+				lock (static_PreviewList_CacheVirtualItems_PrevStartIndex_Init) {
+					try {
+						if (InitStaticVariableHelper(static_PreviewList_CacheVirtualItems_PrevStartIndex_Init)) {
+							static_PreviewList_CacheVirtualItems_PrevStartIndex = -1;
+						}
+					} finally {
+						static_PreviewList_CacheVirtualItems_PrevStartIndex_Init.State = 1;
+					}
 				}
-			} finally {
-				static_PreviewList_CacheVirtualItems_PrevStartIndex_Init.State = 1;
+				return;
+				if (static_PreviewList_CacheVirtualItems_PrevStartIndex != e.StartIndex) {
+					static_PreviewList_CacheVirtualItems_PrevStartIndex = e.StartIndex;
+					for (int id = 0; id <= PreviewList.Columns.Count - 1; id++) {
+						PreviewList.AutoResizeColumn(id, ColumnHeaderAutoResizeStyle.ColumnContent);
+					}
+				}
 			}
-		}
-		return;
-		if (static_PreviewList_CacheVirtualItems_PrevStartIndex != e.StartIndex) {
-			static_PreviewList_CacheVirtualItems_PrevStartIndex = e.StartIndex;
-			for (int id = 0; id <= PreviewList.Columns.Count - 1; id++) {
-				PreviewList.AutoResizeColumn(id, ColumnHeaderAutoResizeStyle.ColumnContent);
-			}
-		}
-	}
-#endif*/
+		#endif*/
 
 		private void PreviewList_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
 		{
@@ -318,7 +319,7 @@ namespace CreateSync.Forms
 			if ((Control.ModifierKeys & Keys.Control) != 0)
 				Path = System.IO.Path.GetDirectoryName(Path);
 
-			if (System.IO.File.Exists(Path) || IO.Directory.Exists(Path))
+			if (System.IO.File.Exists(Path) || System.IO.Directory.Exists(Path))
 				Interaction.StartProcess(Path);
 		}
 
@@ -328,7 +329,7 @@ namespace CreateSync.Forms
 			if (PreviewList.SelectedIndices.Count == 0 || Status.ShowingErrors)
 				return false;
 
-			SyncingItem CurItem = SyncingList(PreviewList.SelectedIndices(0));
+			SyncingItem CurItem = SyncingList[PreviewList.SelectedIndices[0]];
 
 			string LeftFile = null;
 			string RightFile = null;
@@ -349,66 +350,36 @@ namespace CreateSync.Forms
 
 			return true;
 		}
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_UpdateStatuses_PreviousActionsDone_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
 
-		long static_UpdateStatuses_PreviousActionsDone;
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_UpdateStatuses_CanDelete_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
-		bool static_UpdateStatuses_CanDelete;
 		private void UpdateStatuses()
 		{
-			lock (static_UpdateStatuses_PreviousActionsDone_Init)
-			{
-				try
-				{
-					if (InitStaticVariableHelper(static_UpdateStatuses_PreviousActionsDone_Init))
-					{
-						static_UpdateStatuses_PreviousActionsDone = -1;
-					}
-				}
-				finally
-				{
-					static_UpdateStatuses_PreviousActionsDone_Init.State = 1;
-				}
-			}
-			lock (static_UpdateStatuses_CanDelete_Init)
-			{
-				try
-				{
-					if (InitStaticVariableHelper(static_UpdateStatuses_CanDelete_Init))
-					{
-						static_UpdateStatuses_CanDelete = (Handler.GetSetting<int>(ProfileSetting.Method, ProfileSetting.DefaultMethod) == SyncMethod.LRMirror);
-					}
-				}
-				finally
-				{
-					static_UpdateStatuses_CanDelete_Init.State = 1;
-				}
-			}
+			long PreviousActionsDone = -1;
+			bool CanDelete = (Handler.GetSetting<int>(ProfileSetting.Method, ProfileSetting.DefaultMethod) == (int)ProfileSetting.SyncMethod.LRMirror);
 
-			Status.TimeElapsed = (DateTime.Now - Status.StartTime) + new TimeSpan(1000000);
-			// ie +0.1s
+			Status.TimeElapsed = (DateTime.Now - Status.StartTime) + new TimeSpan(1000000); // ie +0.1s
 
 			string EstimateString = "";
-			bool Copying = Status.CurrentStep == StatusData.SyncStep.LR | (!static_UpdateStatuses_CanDelete & Status.CurrentStep == StatusData.SyncStep.RL);
+			bool Copying = Status.CurrentStep == StatusData.SyncStep.LR | (!CanDelete & Status.CurrentStep == StatusData.SyncStep.RL);
 
 			if (Status.CurrentStep == StatusData.SyncStep.Scan)
 			{
-				Speed.Text = Math.Round(Status.FilesScanned / Status.TimeElapsed.TotalSeconds).ToString + " files/s";
+				Speed.Text = Math.Round(Status.FilesScanned / Status.TimeElapsed.TotalSeconds).ToString() + " files/s";
 			}
-			else if (static_UpdateStatuses_CanDelete & Status.CurrentStep == StatusData.SyncStep.RL)
+			else if (CanDelete & Status.CurrentStep == StatusData.SyncStep.RL)
 			{
-				Speed.Text = Math.Round(Status.DeletedFiles / Status.TimeElapsed.TotalSeconds).ToString + " files/s";
+				Speed.Text = Math.Round(Status.DeletedFiles / Status.TimeElapsed.TotalSeconds).ToString() + " files/s";
 			}
-			else if (Copying && static_UpdateStatuses_PreviousActionsDone != Status.ActionsDone)
+			else if (Copying && PreviousActionsDone != Status.ActionsDone)
 			{
-				static_UpdateStatuses_PreviousActionsDone = Status.ActionsDone;
+				PreviousActionsDone = Status.ActionsDone;
 
 				Status.Speed = Status.BytesCopied / Status.TimeElapsed.TotalSeconds;
 				Speed.Text = Utilities.FormatSize(Status.Speed) + "/s";
 			}
 
 
-			if (Copying && Status.Speed > (1 << 10) && Status.TimeElapsed.TotalSeconds > ProgramSetting.ForecastDelay && ProgramConfig.GetProgramSetting<bool>(ProgramSetting.Forecast, false))
+			if (Copying && Status.Speed > (1 << 10) && Status.TimeElapsed.TotalSeconds > ProgramSetting.ForecastDelay
+				&& Program.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.Forecast, false))
 			{
 				int TotalTime = Convert.ToInt32(Math.Min(int.MaxValue, Status.BytesToCopy / Status.Speed));
 				EstimateString = string.Format(" / ~{0}", Utilities.FormatTimespan(new TimeSpan(0, 0, TotalTime)));
@@ -426,9 +397,9 @@ namespace CreateSync.Forms
 			{
 				if (Labels != null)
 				{
-					Step1StatusLabel.Text = Labels(1);
-					Step2StatusLabel.Text = Labels(2);
-					Step3StatusLabel.Text = Labels(3);
+					Step1StatusLabel.Text = Labels[1];
+					Step2StatusLabel.Text = Labels[2];
+					Step3StatusLabel.Text = Labels[3];
 				}
 				Interaction.StatusIcon.Text = StatusLabel;
 			}
@@ -465,19 +436,19 @@ namespace CreateSync.Forms
 			switch (Id)
 			{
 				case StatusData.SyncStep.Scan:
-					StatusText = Translation.TranslateFormat("\\STEP_1_STATUS", StatusText);
+					StatusText = Program.Translation.TranslateFormat("\\STEP_1_STATUS", StatusText);
 					break;
 				case StatusData.SyncStep.LR:
-					StatusText = Translation.TranslateFormat("\\STEP_2_STATUS", Step2ProgressBar.Value, Step2ProgressBar.Maximum, StatusText);
+					StatusText = Program.Translation.TranslateFormat("\\STEP_2_STATUS", Step2ProgressBar.Value, Step2ProgressBar.Maximum, StatusText);
 					break;
 				case StatusData.SyncStep.RL:
-					StatusText = Translation.TranslateFormat("\\STEP_3_STATUS", Step3ProgressBar.Value, Step3ProgressBar.Maximum, StatusText);
+					StatusText = Program.Translation.TranslateFormat("\\STEP_3_STATUS", Step3ProgressBar.Value, Step3ProgressBar.Maximum, StatusText);
 					break;
 			}
 
 			lock (Lock)
 			{
-				Labels(Id) = Text;
+				Labels[(int)Id] = Text;
 				StatusLabel = StatusText;
 			}
 		}
@@ -495,7 +466,7 @@ namespace CreateSync.Forms
 			}
 		}
 
-		private void Increment(StatusData.SyncStep Id, int Progress)
+		private void Increment(StatusData.SyncStep Id, int Progress, bool Finished)
 		{
 			ProgressBar CurBar = GetProgressBar(Id);
 			if (CurBar.Value + Progress < CurBar.Maximum)
@@ -519,7 +490,7 @@ namespace CreateSync.Forms
 			//Prevents a potentially infinite exit loop.
 
 			SetMax(StepId, 100, true);
-			UpdateLabel(StepId, Translation.Translate("\\FINISHED"));
+			UpdateLabel(StepId, Program.Translation.Translate("\\FINISHED"));
 			UpdateStatuses();
 
 			switch (StepId)
@@ -530,7 +501,7 @@ namespace CreateSync.Forms
 					if (Preview)
 					{
 						ShowPreviewList();
-						StopBtn.Text = StopBtn.Tag.ToString.Split(';')(1);
+						StopBtn.Text = StopBtn.Tag.ToString().Split(';')[1];
 					}
 
 					break;
@@ -559,20 +530,20 @@ namespace CreateSync.Forms
 						PreviewList.VirtualListSize = Log.Errors.Count;
 
 						PreviewList.Columns.Clear();
-						PreviewList.Columns.Add(Translation.Translate("\\ERROR"));
-						PreviewList.Columns.Add(Translation.Translate("\\ERROR_DETAIL"));
-						PreviewList.Columns.Add(Translation.Translate("\\PATH"));
+						PreviewList.Columns.Add(Program.Translation.Translate("\\ERROR"));
+						PreviewList.Columns.Add(Program.Translation.Translate("\\ERROR_DETAIL"));
+						PreviewList.Columns.Add(Program.Translation.Translate("\\PATH"));
 
 						PreviewList.Refresh();
 						PreviewList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 
 						if (!Status.Cancel)
-							Interaction.ShowBalloonTip(Translation.TranslateFormat("\\SYNCED_W_ERRORS", Handler.ProfileName), Handler.LogPath);
+							Interaction.ShowBalloonTip(Program.Translation.TranslateFormat("\\SYNCED_W_ERRORS", Handler.ProfileName), Handler.LogPath);
 					}
 					else
 					{
 						if (!Status.Cancel)
-							Interaction.ShowBalloonTip(Translation.TranslateFormat("\\SYNCED_OK", Handler.ProfileName), Handler.LogPath);
+							Interaction.ShowBalloonTip(Program.Translation.TranslateFormat("\\SYNCED_OK", Handler.ProfileName), Handler.LogPath);
 					}
 
 					Log.SaveAndDispose(LeftRootPath, RightRootPath, Status);
@@ -588,7 +559,7 @@ namespace CreateSync.Forms
 					}
 					else
 					{
-						StopBtn.Text = StopBtn.Tag.ToString.Split(';')(1);
+						StopBtn.Text = StopBtn.Tag.ToString().Split(';')[1];
 					}
 					break;
 			}
@@ -619,9 +590,9 @@ namespace CreateSync.Forms
 				Type = TypeOfItem.Folder
 			};
 
-			PreviewList.Items.Add(i1.ToListViewItem);
-			PreviewList.Items.Add(i2.ToListViewItem);
-			PreviewList.Items.Add(i3.ToListViewItem);
+			PreviewList.Items.Add(i1.ToListViewItem());
+			PreviewList.Items.Add(i2.ToListViewItem());
+			PreviewList.Items.Add(i3.ToListViewItem());
 
 			PreviewList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 			PreviewList.Items.Clear();
@@ -639,19 +610,19 @@ namespace CreateSync.Forms
 			// Search for a post-sync action, requiring that Expert mode be enabled.
 			string PostSyncAction = Handler.GetSetting<string>(ProfileSetting.PostSyncAction);
 
-			if (ProgramConfig.GetProgramSetting<bool>(ProgramSetting.ExpertMode, false) && PostSyncAction != null)
+			if (Program.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.ExpertMode, false) && PostSyncAction != null)
 			{
 				try
 				{
 					Environment.CurrentDirectory = Application.StartupPath;
-					Interaction.ShowBalloonTip(string.Format(Translation.Translate("\\POST_SYNC"), PostSyncAction));
-					Diagnostics.Process.Start(PostSyncAction, string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"", Handler.ProfileName, !(Status.Cancel | Status.Failed), Log.Errors.Count, LeftRootPath, RightRootPath, Handler.ErrorsLogPath));
+					Interaction.ShowBalloonTip(string.Format(Program.Translation.Translate("\\POST_SYNC"), PostSyncAction));
+					System.Diagnostics.Process.Start(PostSyncAction, string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"", Handler.ProfileName, !(Status.Cancel | Status.Failed), Log.Errors.Count, LeftRootPath, RightRootPath, Handler.ErrorsLogPath));
 				}
 				catch (Exception Ex)
 				{
-					string Err = Translation.Translate("\\POSTSYNC_FAILED") + Environment.NewLine + Ex.Message;
+					string Err = Program.Translation.Translate("\\POSTSYNC_FAILED") + Environment.NewLine + Ex.Message;
 					Interaction.ShowBalloonTip(Err);
-					ProgramConfig.LogAppEvent(Err);
+					Program.ProgramConfig.LogAppEvent(Err);
 				}
 			}
 		}
@@ -706,13 +677,13 @@ namespace CreateSync.Forms
 			switch (Handler.GetSetting<int>(ProfileSetting.Method, ProfileSetting.DefaultMethod))
 			{
 				//Important: (Of Integer)
-				case SyncMethod.LRMirror:
+				case (int)ProfileSetting.SyncMethod.LRMirror:
 					Init_Synchronization(ref Handler.RightCheckedNodes, Context, TypeOfAction.Delete);
 					break;
-				case SyncMethod.LRIncremental:
+				case (int)ProfileSetting.SyncMethod.LRIncremental:
 					break;
 				//Pass
-				case SyncMethod.BiIncremental:
+				case (int)ProfileSetting.SyncMethod.BiIncremental:
 					Init_Synchronization(ref Handler.RightCheckedNodes, Context, TypeOfAction.Copy);
 					break;
 			}
@@ -776,8 +747,8 @@ namespace CreateSync.Forms
 									CopyFile(SourcePath, DestPath);
 									break;
 								case TypeOfAction.Delete:
-									IO.File.SetAttributes(SourcePath, IO.FileAttributes.Normal);
-									IO.File.Delete(SourcePath);
+									File.SetAttributes(SourcePath, FileAttributes.Normal);
+									File.Delete(SourcePath);
 									Status.DeletedFiles += 1;
 									break;
 							}
@@ -787,32 +758,32 @@ namespace CreateSync.Forms
 							switch (Entry.Action)
 							{
 								case TypeOfAction.Copy:
-									IO.Directory.CreateDirectory(DestPath);
+									Directory.CreateDirectory(DestPath);
 
 									//FIXME: Folder attributes sometimes don't apply well.
-									IO.File.SetAttributes(DestPath, IO.File.GetAttributes(SourcePath));
+									File.SetAttributes(DestPath, File.GetAttributes(SourcePath));
 
 									//When a file is updated, so is its parent folder's last-write time.
 									//LATER: Remove this line: manual copying doesn't preserve creation time.
-									IO.Directory.SetCreationTimeUtc(DestPath, IO.Directory.GetCreationTimeUtc(SourcePath).AddHours(Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0)));
+									Directory.SetCreationTimeUtc(DestPath, Directory.GetCreationTimeUtc(SourcePath).AddHours(Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0)));
 
 									Status.CreatedFolders += 1;
 									break;
 								case TypeOfAction.Delete:
 #if DEBUG
-									string[] RemainingFiles = IO.Directory.GetFiles(SourcePath);
-									string[] RemainingFolders = IO.Directory.GetDirectories(SourcePath);
+									string[] RemainingFiles = Directory.GetFiles(SourcePath);
+									string[] RemainingFolders = Directory.GetDirectories(SourcePath);
 									if (RemainingFiles.Length > 0 | RemainingFolders.Length > 0)
 										Log.LogInfo(string.Format("Do_Tasks: Removing non-empty folder {0} ({1}) ({2})", SourcePath, string.Join(", ", RemainingFiles), string.Join(", ", RemainingFolders)));
 #endif
 									try
 									{
-										IO.Directory.Delete(SourcePath, true);
+										Directory.Delete(SourcePath, true);
 									}
 									catch (Exception ex)
 									{
-										IO.DirectoryInfo DirInfo = new IO.DirectoryInfo(SourcePath);
-										DirInfo.Attributes = IO.FileAttributes.Directory;
+										DirectoryInfo DirInfo = new DirectoryInfo(SourcePath);
+										DirInfo.Attributes = FileAttributes.Directory;
 										//Using "DirInfo.Attributes = IO.FileAttributes.Normal" does just the same, and actually sets DirInfo.Attributes to "IO.FileAttributes.Directory"
 										DirInfo.Delete();
 									}
@@ -825,7 +796,7 @@ namespace CreateSync.Forms
 					Log.LogAction(Entry, Side, true);
 
 				}
-				catch (Threading.ThreadAbortException StopEx)
+				catch (ThreadAbortException StopEx)
 				{
 					return;
 
@@ -850,7 +821,7 @@ namespace CreateSync.Forms
 			foreach (string Folder in FoldersList.Keys)
 			{
 				Log.LogInfo(string.Format("=> Scanning \"{0}\" top level folders: \"{1}\"", Context.SourceRootPath, Folder));
-				if (IO.Directory.Exists(CombinePathes(Context.SourceRootPath, Folder)))
+				if (Directory.Exists(CombinePathes(Context.SourceRootPath, Folder)))
 				{
 					if (Action == TypeOfAction.Copy)
 					{
@@ -859,11 +830,11 @@ namespace CreateSync.Forms
 						//How to do that? Well, if ancestors of a folder have not been scanned, it means that this folder wasn't reached by a recursive call, but by a initial call.
 						//Therefore, only the folders in the sync config file should be added.
 						AddValidAncestors(Folder);
-						SearchForChanges(Folder, FoldersList(Folder), Context);
+						SearchForChanges(Folder, FoldersList[Folder], Context);
 					}
 					else if (Action == TypeOfAction.Delete)
 					{
-						SearchForCrap(Folder, FoldersList(Folder), Context);
+						SearchForCrap(Folder, FoldersList[Folder], Context);
 					}
 				}
 			}
@@ -929,15 +900,15 @@ namespace CreateSync.Forms
 		private void AddValidAncestors(string Folder)
 		{
 			Log.LogInfo(string.Format("AddValidAncestors: Folder \"{0}\" is a top level folder, adding it's ancestors.", Folder));
-			System.Text.StringBuilder CurrentAncestor = new System.Text.StringBuilder();
+			StringBuilder CurrentAncestor = new StringBuilder();
 			List<string> Ancestors = new List<string>(Folder.Split(new char[] { ProgramSetting.DirSep }, StringSplitOptions.RemoveEmptyEntries));
 
 			//The last ancestor is the folder itself, and will be added in SearchForChanges.
 			for (int Depth = 0; Depth <= (Ancestors.Count - 1) - 1; Depth++)
 			{
-				CurrentAncestor.Append(ProgramSetting.DirSep).Append(Ancestors(Depth));
-				AddValidFile(CurrentAncestor.ToString);
-				Log.LogInfo(string.Format("AddValidAncestors: [Valid folder] \"{0}\"", CurrentAncestor.ToString));
+				CurrentAncestor.Append(ProgramSetting.DirSep).Append(Ancestors[Depth]);
+				AddValidFile(CurrentAncestor.ToString());
+				Log.LogInfo(string.Format("AddValidAncestors: [Valid folder] \"{0}\"", CurrentAncestor.ToString()));
 			}
 		}
 
@@ -954,7 +925,7 @@ namespace CreateSync.Forms
 
 		private void PopSyncingList(SideOfSource Side)
 		{
-			ValidFiles.Remove(SyncingList(SyncingList.Count - 1).Path);
+			ValidFiles.Remove(SyncingList[SyncingList.Count - 1].Path);
 			SyncingList.RemoveAt(SyncingList.Count - 1);
 
 			Status.TotalActionsCount -= 1;
@@ -984,7 +955,7 @@ namespace CreateSync.Forms
 			Log.LogInfo(string.Format("=> Scanning folder \"{0}\" for new or updated files.", Folder));
 
 			//LATER: Factor out.
-			bool IsNewFolder = !IO.Directory.Exists(DestinationFolder);
+			bool IsNewFolder = !Directory.Exists(DestinationFolder);
 			bool ShouldUpdateFolder = IsNewFolder || AttributesChanged(SourceFolder, DestinationFolder);
 			if (ShouldUpdateFolder)
 			{
@@ -1000,16 +971,16 @@ namespace CreateSync.Forms
 			int InitialValidFilesCount = ValidFiles.Count;
 			try
 			{
-				foreach (string SourceFile in IO.Directory.GetFiles(SourceFolder))
+				foreach (string SourceFile in Directory.GetFiles(SourceFolder))
 				{
 					Log.LogInfo("Scanning " + SourceFile);
-					string DestinationFile = GetCompressedName(CombinePathes(DestinationFolder, IO.Path.GetFileName(SourceFile)));
+					string DestinationFile = GetCompressedName(CombinePathes(DestinationFolder, Path.GetFileName(SourceFile)));
 
 					try
 					{
 						if (IsIncludedInSync(SourceFile))
 						{
-							bool IsNewFile = !IO.File.Exists(DestinationFile);
+							bool IsNewFile = !File.Exists(DestinationFile);
 							string RelativeFilePath = SourceFile.Substring(Context.SourceRootPath.Length);
 
 							if (IsNewFile || SourceIsMoreRecent(SourceFile, DestinationFile))
@@ -1017,7 +988,7 @@ namespace CreateSync.Forms
 								AddToSyncingList(RelativeFilePath, TypeOfItem.File, Context.Source, TypeOfAction.Copy, !IsNewFile);
 								Log.LogInfo(string.Format("SearchForChanges: {0} \"{1}\" \"{2}\" ({3}).", IsNewFile ? "[New File]" : "[Updated file]", SourceFile, DestinationFile, RelativeFilePath));
 
-								if (ProgramConfig.GetProgramSetting<bool>(ProgramSetting.Forecast, false))
+								if (Program.ProgramConfig.GetProgramSetting<bool>(ProgramSetting.Forecast, false))
 									Status.BytesToCopy += Utilities.GetSize(SourceFile);
 								//Degrades performance.
 							}
@@ -1052,9 +1023,9 @@ namespace CreateSync.Forms
 			{
 				try
 				{
-					foreach (string SubFolder in IO.Directory.GetDirectories(SourceFolder))
+					foreach (string SubFolder in Directory.GetDirectories(SourceFolder))
 					{
-						if (Recursive || (AutoInclude && IO.Directory.GetCreationTimeUtc(SubFolder) > MDate))
+						if (Recursive || (AutoInclude && Directory.GetCreationTimeUtc(SubFolder) > MDate))
 						{
 							SearchForChanges(SubFolder.Substring(Context.SourceRootPath.Length), true, Context);
 						}
@@ -1101,7 +1072,7 @@ namespace CreateSync.Forms
 			Log.LogInfo(string.Format("=> Scanning folder \"{0}\" for files to delete.", Folder));
 			try
 			{
-				foreach (string File in IO.Directory.GetFiles(SourceFolder))
+				foreach (string File in System.IO.Directory.GetFiles(SourceFolder))
 				{
 					string RelativeFName = File.Substring(Context.SourceRootPath.Length);
 
@@ -1135,9 +1106,9 @@ namespace CreateSync.Forms
 			{
 				try
 				{
-					foreach (string SubFolder in IO.Directory.GetDirectories(SourceFolder))
+					foreach (string SubFolder in Directory.GetDirectories(SourceFolder))
 					{
-						if (Recursive || (AutoInclude && IO.Directory.GetCreationTimeUtc(SubFolder) > MDate))
+						if (Recursive || (AutoInclude && Directory.GetCreationTimeUtc(SubFolder) > MDate))
 						{
 							SearchForCrap(SubFolder.Substring(Context.SourceRootPath.Length), true, Context);
 						}
@@ -1162,18 +1133,18 @@ namespace CreateSync.Forms
 			//Updating attributes is needed.
 			if (Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0) != 0)
 			{
-				Log.LogInfo("SyncFileAttributes: DST: Setting attributes to normal; current attributes: " + IO.File.GetAttributes(DestFile));
-				IO.File.SetAttributes(DestFile, IO.FileAttributes.Normal);
+				Log.LogInfo("SyncFileAttributes: DST: Setting attributes to normal; current attributes: " + File.GetAttributes(DestFile));
+				File.SetAttributes(DestFile, FileAttributes.Normal);
 				//Tracker #2999436
 				Log.LogInfo("SyncFileAttributes: DST: Setting last write time");
 				//Must use IO.File.GetLastWriteTimeUtc(**DestFile**), because it might differ from IO.File.GetLastWriteTimeUtc(**SourceFile**) (rounding, DST settings, ...)
-				IO.File.SetLastWriteTimeUtc(DestFile, IO.File.GetLastWriteTimeUtc(DestFile).AddHours(Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0)));
-				Log.LogInfo("SyncFileAttributes: DST: Last write time set to " + IO.File.GetLastWriteTimeUtc(DestFile));
+				File.SetLastWriteTimeUtc(DestFile, File.GetLastWriteTimeUtc(DestFile).AddHours(Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0)));
+				Log.LogInfo("SyncFileAttributes: DST: Last write time set to " + File.GetLastWriteTimeUtc(DestFile));
 			}
 
-			Log.LogInfo("SyncFileAttributes: Setting attributes to " + IO.File.GetAttributes(SourceFile));
-			IO.File.SetAttributes(DestFile, IO.File.GetAttributes(SourceFile));
-			Log.LogInfo("SyncFileAttributes: Attributes set to " + IO.File.GetAttributes(DestFile));
+			Log.LogInfo("SyncFileAttributes: Setting attributes to " + File.GetAttributes(SourceFile));
+			File.SetAttributes(DestFile, File.GetAttributes(SourceFile));
+			Log.LogInfo("SyncFileAttributes: Attributes set to " + File.GetAttributes(DestFile));
 		}
 
 		private static void SafeCopy(string SourceFile, string DestFile)
@@ -1182,79 +1153,45 @@ namespace CreateSync.Forms
 			string DestBack = null;
 			do
 			{
-				TempDest = DestFile + "-" + IO.Path.GetRandomFileName();
-				DestBack = DestFile + "-" + IO.Path.GetRandomFileName();
-			} while (IO.File.Exists(TempDest) | IO.File.Exists(DestBack));
+				TempDest = DestFile + "-" + Path.GetRandomFileName();
+				DestBack = DestFile + "-" + Path.GetRandomFileName();
+			} while (File.Exists(TempDest) | File.Exists(DestBack));
 
-			IO.File.Copy(SourceFile, TempDest, false);
-			IO.File.Move(DestFile, DestBack);
-			IO.File.Move(TempDest, DestFile);
-			IO.File.Delete(DestBack);
+			File.Copy(SourceFile, TempDest, false);
+			File.Move(DestFile, DestBack);
+			File.Move(TempDest, DestFile);
+			File.Delete(DestBack);
 		}
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_CopyFile_GZipCompressor_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
 
-
-
-
-
-		Compressor static_CopyFile_GZipCompressor;
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_CopyFile_Decompress_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
-		bool static_CopyFile_Decompress;
 		private void CopyFile(string SourceFile, string DestFile)
 		{
 			string CompressedFile = GetCompressedName(DestFile);
 			Log.LogInfo(string.Format("CopyFile: Source: {0}, Destination: {1}", SourceFile, DestFile));
-			if (IO.File.Exists(DestFile))
+			if (File.Exists(DestFile))
 			{
-				IO.File.SetAttributes(DestFile, IO.FileAttributes.Normal);
+				File.SetAttributes(DestFile, FileAttributes.Normal);
 			}
 			bool Compression = CompressedFile != DestFile;
 			DestFile = CompressedFile;
 			if (Compression)
 			{
-				lock (static_CopyFile_GZipCompressor_Init)
-				{
-					try
-					{
-						if (InitStaticVariableHelper(static_CopyFile_GZipCompressor_Init))
-						{
-							static_CopyFile_GZipCompressor = LoadCompressionDll();
-						}
-					}
-					finally
-					{
-						static_CopyFile_GZipCompressor_Init.State = 1;
-					}
-				}
-				lock (static_CopyFile_Decompress_Init)
-				{
-					try
-					{
-						if (InitStaticVariableHelper(static_CopyFile_Decompress_Init))
-						{
-							static_CopyFile_Decompress = Handler.GetSetting<bool>(ProfileSetting.Decompress, false);
-						}
-					}
-					finally
-					{
-						static_CopyFile_Decompress_Init.State = 1;
-					}
-				}
-				//GZipCompressor.CompressFile(SourceFile, CompressedFile, Decompress, Sub(Progress As Long) Status.BytesCopied += Progress)
+				Compressor GZipCompressor = LoadCompressionDll();
+				bool Decompress = Handler.GetSetting<bool>(ProfileSetting.Decompress, false);
+				GZipCompressor.CompressFile(SourceFile, CompressedFile, Decompress, (long Progress) => { Status.BytesCopied += Progress; }); //, ByRef ContinueRunning As Boolean) 'ContinueRunning = Not [STOP]
 			}
 			else
 			{
-				if (IO.File.Exists(DestFile))
+				if (File.Exists(DestFile))
 				{
 					try
 					{
-						using (IO.FileStream TestForAccess = new IO.FileStream(SourceFile, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.None))
+						using (FileStream TestForAccess = new FileStream(SourceFile, FileMode.Open, FileAccess.Read, FileShare.None))
 						{
 						}
 						//Checks whether the file can be accessed before trying to copy it. This line was added because if the file is only partially locked, CopyFileEx starts copying it, then fails on the way, and deletes the destination.
-						IO.File.Copy(SourceFile, DestFile, true);
+						File.Copy(SourceFile, DestFile, true);
 					}
-					catch (IO.IOException Ex)
+					catch (IOException Ex)
 					{
 						Log.LogInfo(string.Format("Copy failed with message \"{0}\": Retrying in safe mode", Ex.Message));
 						SafeCopy(SourceFile, DestFile);
@@ -1262,7 +1199,7 @@ namespace CreateSync.Forms
 				}
 				else
 				{
-					IO.File.Copy(SourceFile, DestFile);
+					File.Copy(SourceFile, DestFile);
 				}
 			}
 
@@ -1290,13 +1227,13 @@ namespace CreateSync.Forms
 		private bool IsExcludedSinceHidden(string Path)
 		{
 			//File.GetAttributes works for folders ; see http://stackoverflow.com/questions/8110646/
-			return Handler.GetSetting<bool>(ProfileSetting.ExcludeHidden, false) && (IO.File.GetAttributes(Path) & IO.FileAttributes.Hidden) != 0;
+			return Handler.GetSetting<bool>(ProfileSetting.ExcludeHidden, false) && (File.GetAttributes(Path) & FileAttributes.Hidden) != 0;
 		}
 
 		private bool IsTooOld(string Path)
 		{
 			int Days = Handler.GetSetting<int>(ProfileSetting.DiscardAfter, 0);
-			return ((Days > 0) && (System.DateTime.UtcNow - IO.File.GetLastWriteTimeUtc(Path)).TotalDays > Days);
+			return ((Days > 0) && (DateTime.UtcNow - File.GetLastWriteTimeUtc(Path)).TotalDays > Days);
 		}
 
 		private bool IsIncludedInSync(string FullPath)
@@ -1325,53 +1262,39 @@ namespace CreateSync.Forms
 
 		private bool HasAcceptedDirname(string Path)
 		{
-			return !FileNamePattern.MatchesPattern(Path, ExcludedDirPatterns);
+			return !FileNamePattern.MatchesPattern(Path, ref ExcludedDirPatterns);
 		}
-		readonly Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag static_GetCompressedName_Extension_Init = new Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag();
 
-		string static_GetCompressedName_Extension;
+
 		private string GetCompressedName(string OriginalName)
 		{
-			lock (static_GetCompressedName_Extension_Init)
-			{
-				try
-				{
-					if (InitStaticVariableHelper(static_GetCompressedName_Extension_Init))
-					{
-						static_GetCompressedName_Extension = Handler.GetSetting<string>(ProfileSetting.CompressionExt, "");
-					}
-				}
-				finally
-				{
-					static_GetCompressedName_Extension_Init.State = 1;
-				}
-			}
+			string Extension = Handler.GetSetting<string>(ProfileSetting.CompressionExt, "");
 
-			if (!string.IsNullOrEmpty(static_GetCompressedName_Extension) && Handler.GetSetting<bool>(ProfileSetting.Decompress, false))
+			if (!string.IsNullOrEmpty(Extension) && Handler.GetSetting<bool>(ProfileSetting.Decompress, false))
 			{
-				return OriginalName.EndsWith(static_GetCompressedName_Extension) ? OriginalName.Substring(0, OriginalName.LastIndexOf(static_GetCompressedName_Extension)) : OriginalName;
+				return OriginalName.EndsWith(Extension) ? OriginalName.Substring(0, OriginalName.LastIndexOf(Extension)) : OriginalName;
 			}
 			else
 			{
-				return OriginalName + static_GetCompressedName_Extension;
+				return OriginalName + Extension;
 			}
 			//AndAlso Utilities.GetSize(File) > ConfigOptions.CompressionThreshold
 		}
 
 		private bool AttributesChanged(string AbsSource, string AbsDest)
 		{
-			const IO.FileAttributes AttributesMask = IO.FileAttributes.Hidden | IO.FileAttributes.System | IO.FileAttributes.Encrypted;
+			const FileAttributes AttributesMask = FileAttributes.Hidden | FileAttributes.System | FileAttributes.Encrypted;
 
 			// Disabled by default, and in two-ways mode.
 			// TODO: Enable by default. It's currently disabled because some network drives do not update attributes correctly.
 			if (!Handler.GetSetting<bool>(ProfileSetting.SyncFolderAttributes, false))
 				return false;
-			if (Handler.GetSetting<int>(ProfileSetting.Method, ProfileSetting.DefaultMethod) == ProfileSetting.SyncMethod.BiIncremental)
+			if (Handler.GetSetting<int>(ProfileSetting.Method, ProfileSetting.DefaultMethod) == (int)ProfileSetting.SyncMethod.BiIncremental)
 				return false;
 
 			try
 			{
-				return ((IO.File.GetAttributes(AbsSource) & AttributesMask) != (IO.File.GetAttributes(AbsDest) & AttributesMask));
+				return ((File.GetAttributes(AbsSource) & AttributesMask) != (File.GetAttributes(AbsDest) & AttributesMask));
 			}
 			catch (Exception Ex)
 			{
@@ -1389,9 +1312,11 @@ namespace CreateSync.Forms
 
 			Log.LogInfo(string.Format("SourceIsMoreRecent: {0}, {1}", AbsSource, AbsDest));
 
-			System.DateTime SourceFATTime = NTFSToFATTime(IO.File.GetLastWriteTimeUtc(AbsSource)).AddHours(Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0));
-			System.DateTime DestFATTime = NTFSToFATTime(IO.File.GetLastWriteTimeUtc(AbsDest));
-			Log.LogInfo(string.Format("SourceIsMoreRecent: S:({0}, {1}); D:({2}, {3})", Interaction.FormatDate(IO.File.GetLastWriteTimeUtc(AbsSource)), Interaction.FormatDate(SourceFATTime), Interaction.FormatDate(IO.File.GetLastWriteTimeUtc(AbsDest)), Interaction.FormatDate(DestFATTime)));
+			DateTime SourceFATTime = NTFSToFATTime(IO.File.GetLastWriteTimeUtc(AbsSource)).AddHours(Handler.GetSetting<int>(ProfileSetting.TimeOffset, 0));
+			DateTime DestFATTime = NTFSToFATTime(IO.File.GetLastWriteTimeUtc(AbsDest));
+			Log.LogInfo(string.Format("SourceIsMoreRecent: S:({0}, {1}); D:({2}, {3})",
+				Interaction.FormatDate(File.GetLastWriteTimeUtc(AbsSource)), Interaction.FormatDate(SourceFATTime),
+				Interaction.FormatDate(File.GetLastWriteTimeUtc(AbsDest)), Interaction.FormatDate(DestFATTime)));
 
 			if (Handler.GetSetting<bool>(ProfileSetting.FuzzyDstCompensation, false))
 			{
@@ -1438,29 +1363,29 @@ namespace CreateSync.Forms
 		}
 		#endregion
 
-		#region " Shared functions "
+		#region Shared functions
 		private static string CombinePathes(string Dir, string File)
 		{
-			//LATER: Should be optimized; IO.Path?
+			//TODO: Should be optimized; IO.Path?
 			return Dir.TrimEnd(ProgramSetting.DirSep) + ProgramSetting.DirSep + File.TrimStart(ProgramSetting.DirSep);
 		}
 
 		private static Compressor LoadCompressionDll()
 		{
-			Reflection.Assembly DLL = Reflection.Assembly.LoadFrom(ProgramConfig.CompressionDll);
+			System.Reflection.Assembly DLL = System.Reflection.Assembly.LoadFrom(Program.ProgramConfig.CompressionDll);
 
-			foreach (Type SubType in DLL.GetTypes)
+			foreach (Type SubType in DLL.GetTypes())
 			{
 				if (typeof(Compressor).IsAssignableFrom(SubType))
 					return (Compressor)Activator.CreateInstance(SubType);
 			}
 
-			throw new ArgumentException("Invalid DLL: " + ProgramConfig.CompressionDll);
+			throw new ArgumentException("Invalid DLL: " + Program.ProgramConfig.CompressionDll);
 		}
 
 		private static string Md5(string Path)
 		{
-			using (IO.StreamReader DataStream = new IO.StreamReader(Path))
+			using (StreamReader DataStream = new StreamReader(Path))
 			{
 				using (System.Security.Cryptography.MD5CryptoServiceProvider CryptObject = new System.Security.Cryptography.MD5CryptoServiceProvider())
 				{
@@ -1469,9 +1394,9 @@ namespace CreateSync.Forms
 			}
 		}
 
-		private static System.DateTime NTFSToFATTime(System.DateTime NTFSTime)
+		private static DateTime NTFSToFATTime(DateTime NTFSTime)
 		{
-			return (new System.DateTime(NTFSTime.Year, NTFSTime.Month, NTFSTime.Day, NTFSTime.Hour, NTFSTime.Minute, NTFSTime.Second).AddSeconds(NTFSTime.Millisecond == 0 ? NTFSTime.Second % 2 : 2 - (NTFSTime.Second % 2)));
+			return (new DateTime(NTFSTime.Year, NTFSTime.Month, NTFSTime.Day, NTFSTime.Hour, NTFSTime.Minute, NTFSTime.Second).AddSeconds(NTFSTime.Millisecond == 0 ? NTFSTime.Second % 2 : 2 - (NTFSTime.Second % 2)));
 		}
 		#endregion
 
@@ -1479,11 +1404,11 @@ namespace CreateSync.Forms
 #if DEBUG
 		public struct DatePair
 		{
-			public System.DateTime Ntfs;
+			public DateTime Ntfs;
 
 			public System.DateTime FAT;
-			[Diagnostics.DebuggerStepThrough()]
-			public DatePair(System.DateTime NtfsTime, System.DateTime FatTime)
+			[System.Diagnostics.DebuggerStepThrough()]
+			public DatePair(DateTime NtfsTime, DateTime FatTime)
 			{
 				Ntfs = NtfsTime;
 				FAT = FatTime;
@@ -1497,99 +1422,85 @@ namespace CreateSync.Forms
 		}
 
 		//Note: This could be a useful function for NAS drives known to round NTFS timestamps, but currently only DLink does, and they do it incorrectly (there's a bug in their drivers)
-		private static System.DateTime RoundToSecond(System.DateTime NTFSTime)
+		private static DateTime RoundToSecond(DateTime NTFSTime)
 		{
-			return (new System.DateTime(NTFSTime.Year, NTFSTime.Month, NTFSTime.Day, NTFSTime.Hour, NTFSTime.Minute, NTFSTime.Second).AddSeconds(NTFSTime.Millisecond > 500 ? 1 : 0));
+			return (new DateTime(NTFSTime.Year, NTFSTime.Month, NTFSTime.Day, NTFSTime.Hour, NTFSTime.Minute, NTFSTime.Second).AddSeconds(NTFSTime.Millisecond > 500 ? 1 : 0));
 		}
 
 		public static void Check_StaticFATTimes()
 		{
 			System.Diagnostics.Debug.WriteLine("Starting hardcoded NTFS -> FAT tests");
+			DateTime sevenThirtyOne = DateTime.Parse("7:31:00 AM");
 			List<DatePair> Tests = new List<DatePair> {
-			new DatePair(1/1/0001 7:31:00 AM, 1 / 1 / 0001 7:31:00 AM),
-			new DatePair(1 / 1 / 0001 7:31:00 AM.AddMilliseconds(1), 1 / 1 / 0001 7:31:02 AM),
-			new DatePair(1 / 1 / 0001 7:31:01 AM, 1 / 1 / 0001 7:31:02 AM),
-			new DatePair(1 / 1 / 0001 7:31:01 AM.AddMilliseconds(999), 1 / 1 / 0001 7:31:02 AM)
+				new DatePair(sevenThirtyOne, sevenThirtyOne),
+				new DatePair(sevenThirtyOne.AddMilliseconds(1), sevenThirtyOne.AddSeconds(2)),
+				new DatePair(sevenThirtyOne.AddSeconds(1), sevenThirtyOne.AddSeconds(2)),
+				new DatePair(sevenThirtyOne.AddSeconds(1).AddMilliseconds(999), sevenThirtyOne.AddSeconds(2))
 			};
-		foreach (DatePair Test in Tests) {
-			System.DateTime Actual = NTFSToFATTime(Test.Ntfs);
-		string Result = string.Format("Check_NTFSToFATTime: {0} -> {1} ({2} expected) --> {3}", Test.Ntfs, Actual, Test.FAT, Actual == Test.FAT ? "Ok" : "Failed");
-		System.Diagnostics.Debug.WriteLine(Result);
+			foreach (DatePair Test in Tests)
+			{
+				DateTime Actual = NTFSToFATTime(Test.Ntfs);
+				string Result = string.Format("Check_NTFSToFATTime: {0} -> {1} ({2} expected) --> {3}", Test.Ntfs, Actual, Test.FAT, Actual == Test.FAT ? "Ok" : "Failed");
+				System.Diagnostics.Debug.WriteLine(Result);
+			}
+			System.Diagnostics.Debug.WriteLine("Done!");
 		}
-	System.Diagnostics.Debug.WriteLine("Done!");
-	}
 
-public static void Check_HardwareFATTimes()
-{
-	using (IO.StreamWriter LogWriter = new IO.StreamWriter("C:\\FatTimes.txt", false))
-	{
-		LogWriter.WriteLine("Starting dynamic NTFS -> FAT tests");
-		string Source = "C:\\NtfsTests";
-		string Destination = "Z:\\NtfsTests";
-		if (IO.Directory.Exists(Source))
-			IO.Directory.Delete(Source, true);
-		if (IO.Directory.Exists(Destination))
-			IO.Directory.Delete(Destination, true);
-
-		IO.Directory.CreateDirectory(Source);
-		IO.Directory.CreateDirectory(Destination);
-
-		System.DateTime BaseDate = System.DateTime.Today.AddHours(8);
-		string FormatString = "{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}{5,-15}{6,-15}";
-
-		LogWriter.WriteLine(string.Format(FormatString, "Input", "Source", "Dest (Created)", "Dest (Copied)", "ForecastedDate", "Rounded", "Equal?"));
-
-		for (int ms = 0; ms <= 61000; ms += 71)
+		public static void Check_HardwareFATTimes()
 		{
-			System.DateTime InputDate = BaseDate.AddMilliseconds(ms);
-			string SourcePath = IO.Path.Combine(Source, ms.ToString);
-			string DestPath_Created = IO.Path.Combine(Destination, ms.ToString + "-created");
-			string DestPath_Copied = IO.Path.Combine(Destination, ms.ToString + "-copied");
-			IO.File.Create(SourcePath).Close();
-			IO.File.Create(DestPath_Created).Close();
+			using (StreamWriter LogWriter = new StreamWriter("C:\\FatTimes.txt", false))
+			{
+				LogWriter.WriteLine("Starting dynamic NTFS -> FAT tests");
+				string Source = "C:\\NtfsTests";
+				string Destination = "Z:\\NtfsTests";
+				if (Directory.Exists(Source))
+					Directory.Delete(Source, true);
+				if (Directory.Exists(Destination))
+					Directory.Delete(Destination, true);
 
-			IO.File.SetLastWriteTime(SourcePath, InputDate);
-			IO.File.SetLastWriteTime(DestPath_Created, InputDate);
-			IO.File.Copy(SourcePath, DestPath_Copied);
+				Directory.CreateDirectory(Source);
+				Directory.CreateDirectory(Destination);
 
-			System.DateTime SourceDate = IO.File.GetLastWriteTime(SourcePath);
-			System.DateTime DestCreatedDate = IO.File.GetLastWriteTime(DestPath_Created);
-			System.DateTime DestCopiedDate = IO.File.GetLastWriteTime(DestPath_Copied);
-			System.DateTime ForecastedDate = NTFSToFATTime(InputDate);
-			System.DateTime RoundedDate = RoundToSecond(InputDate);
-			bool Equal = InputDate == SourceDate & DestCreatedDate == DestCopiedDate & DestCopiedDate == ForecastedDate;
+				DateTime BaseDate = DateTime.Today.AddHours(8);
+				string FormatString = "{0,-15}{1,-15}{2,-15}{3,-15}{4,-15}{5,-15}{6,-15}";
 
-			IO.File.Delete(SourcePath);
-			IO.File.Delete(DestPath_Copied);
-			IO.File.Delete(DestPath_Created);
+				LogWriter.WriteLine(string.Format(FormatString, "Input", "Source", "Dest (Created)", "Dest (Copied)", "ForecastedDate", "Rounded", "Equal?"));
 
-			LogWriter.WriteLine(FormatString, FormatDate(InputDate), FormatDate(SourceDate), FormatDate(DestCreatedDate), FormatDate(DestCopiedDate), FormatDate(ForecastedDate), FormatDate(RoundedDate), Equal);
+				for (int ms = 0; ms <= 61000; ms += 71)
+				{
+					DateTime InputDate = BaseDate.AddMilliseconds(ms);
+					string SourcePath = Path.Combine(Source, ms.ToString());
+					string DestPath_Created = Path.Combine(Destination, ms.ToString() + "-created");
+					string DestPath_Copied = Path.Combine(Destination, ms.ToString() + "-copied");
+					File.Create(SourcePath).Close();
+					File.Create(DestPath_Created).Close();
+
+					File.SetLastWriteTime(SourcePath, InputDate);
+					File.SetLastWriteTime(DestPath_Created, InputDate);
+					File.Copy(SourcePath, DestPath_Copied);
+
+					DateTime SourceDate = File.GetLastWriteTime(SourcePath);
+					DateTime DestCreatedDate = File.GetLastWriteTime(DestPath_Created);
+					DateTime DestCopiedDate = File.GetLastWriteTime(DestPath_Copied);
+					DateTime ForecastedDate = NTFSToFATTime(InputDate);
+					DateTime RoundedDate = RoundToSecond(InputDate);
+					bool Equal = InputDate == SourceDate & DestCreatedDate == DestCopiedDate & DestCopiedDate == ForecastedDate;
+
+					File.Delete(SourcePath);
+					File.Delete(DestPath_Copied);
+					File.Delete(DestPath_Created);
+
+					LogWriter.WriteLine(FormatString, FormatDate(InputDate), FormatDate(SourceDate), FormatDate(DestCreatedDate), FormatDate(DestCopiedDate), FormatDate(ForecastedDate), FormatDate(RoundedDate), Equal);
+				}
+
+				Directory.Delete(Source, true);
+				Directory.Delete(Destination, true);
+
+				LogWriter.WriteLine("Done!");
+			}
 		}
-
-		IO.Directory.Delete(Source, true);
-		IO.Directory.Delete(Destination, true);
-
-		LogWriter.WriteLine("Done!");
+#endif
+		#endregion
 	}
-}
-static bool InitStaticVariableHelper(Microsoft.VisualBasic.CompilerServices.StaticLocalInitFlag flag)
-{
-	if (flag.State == 0)
-	{
-		flag.State = 2;
-		return true;
-	}
-	else if (flag.State == 2)
-	{
-		throw new Microsoft.VisualBasic.CompilerServices.IncompleteInitialization();
-	}
-	else
-	{
-		return false;
-	}
-}
-	#endif
-	#endregion
-}
 
 }
