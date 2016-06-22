@@ -44,3 +44,4 @@ My goal in creating this project or fork is to get developers and users alike ex
 - Port code from VB.Net over to C#
 - Upgrade framework dependencies to a reasonable version (4.0+?)
 - Collect bugs and feature requests from the [old tracker](https://sourceforge.net/p/synchronicity/_list/tickets) and fix/implement them
+- Move a lot of the logic out of individual forms' code and into stand-alone classes
